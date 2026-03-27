@@ -1,0 +1,25 @@
+{
+  "name": "École de Comptage des Points",
+  "short_name": "EcCoPo",
+  "description": "Entraînement au comptage des points en tir à l'arc — V4.2",
+  "start_url": "./ecopo.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#EDE8C0",
+  "theme_color": "#0a110c",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

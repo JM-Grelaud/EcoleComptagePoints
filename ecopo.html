@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>École de Comptage des Points</title>
+
+  <!-- ── PWA ──────────────────────────────────────────────── -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a110c">
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- Apple / Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ComptagePoints">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <!-- Icône générique -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ── Header ────────────────────────────────── -->
+  <header class="app-header">
+    <div class="header-title">
+      <span class="app-name">École de Comptage des Points</span>
+    </div>
+    <div class="header-right">
+      <span class="version-tag">V4.2 | © 2016-2026 | Jean-Michel Grelaud</span>
+      <button id="btnClose" class="btn-close" title="Fermer l'application">✕</button>
+    </div>
+  </header>
+
+  <!-- ── Mode bar ──────────────────────────────── -->
+  <div class="mode-bar">
+    <button id="btnSALLE"    class="btn-mode">Volée SALLE</button>
+    <button id="btnTAE"      class="btn-mode">Volée T.A.E.</button>
+    <button id="btnCAMPAGNE" class="btn-mode">Volée CAMPAGNE</button>
+    <div class="spacer"></div>
+    <button id="btnJEU" class="btn-challenge">Challenge OFF</button>
+  </div>
+
+  <!-- ── Arena ─────────────────────────────────── -->
+  <main class="arena">
+
+    <div class="target-wrapper">
+      <canvas id="targetCanvas"></canvas>
+      <div id="flashOverlay" class="flash-overlay"></div>
+      <div id="timerDisplay" class="timer-overlay hidden">60</div>
+    </div>
+
+    <aside class="side-panel">
+
+      <div class="arrows-section">
+        <div class="section-label">Points / Flèche</div>
+        <div id="arrowPoints" class="arrow-list"></div>
+      </div>
+
+      <div class="total-section">
+        <label class="section-label" for="total">TOTAL</label>
+        <input type="text" id="total" inputmode="numeric"
+               placeholder="—" disabled autocomplete="off">
+      </div>
+
+      <div class="keyboard-section">
+        <div id="keyGrid" class="key-grid"></div>
+        <div id="popup" class="popup hidden"></div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ── Splash screen ─────────────────────────── -->
+  <div id="splashOverlay" class="modal-overlay">
+    <div class="modal splash-modal">
+      <img src="icon-192.png" alt="EcCoPo" width="150" height="150" class="splash-icon">
+      <p class="splash-title">École de Comptage des Points</p>
+      <p class="splash-copy">V4.2 | © 2016-2026 | Jean-Michel Grelaud</p>
+    </div>
+  </div>
+  <div id="modalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-icon"><img src="icon-192.png" alt="EcCoPo" width="64" height="64"></div>
+      <p  id="modalTitle"></p>
+      <pre id="modalMsg"></pre>
+      <button id="modalOK">OK</button>
+    </div>
+  </div>
+
+  <!-- ── Modale confirmation fermeture ─────────── -->
+  <div id="confirmOverlay" class="modal-overlay hidden">
+    <div class="modal modal-confirm">
+      <div class="modal-icon">❓</div>
+      <p id="confirmMsg">Confirmez-vous la fermeture de l'application ?</p>
+      <div class="modal-buttons">
+        <button id="confirmYes">Oui</button>
+        <button id="confirmNo">Non</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="target.js"></script>
+  <script src="sounds.js"></script>
+  <script src="app.js"></script>
+
+  <!-- ── Enregistrement du Service Worker ──────── -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('[SW] Enregistré :', reg.scope))
+          .catch(err => console.warn('[SW] Échec :', err));
+      });
+    }
+  </script>
+
+</body>
+</html>

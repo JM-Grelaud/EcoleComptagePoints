@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <filter id="glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="7"
+                    flood-color="#ffe552" flood-opacity="0.22"/>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="3" stdDeviation="4"
+                    flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+    <linearGradient id="kbdGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#2a3e2c"/>
+      <stop offset="100%" stop-color="#172018"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ── Fond jaune paille uniforme ────────────────────────── -->
+  <rect width="512" height="512" rx="96" ry="96" fill="#EDE8C0"/>
+  <!-- Liseré discret -->
+  <rect width="512" height="512" rx="96" ry="96"
+        fill="none" stroke="rgba(160,140,60,0.45)" stroke-width="6"/>
+
+  <!-- ════════════════════════════════════════════════════════
+       BLASON
+       ════════════════════════════════════════════════════════ -->
+  <g transform="translate(195, 210)" filter="url(#glow)">
+    <circle r="158" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="1.5"/>
+    <circle r="126" fill="#111111" stroke="#333"    stroke-width="1.5"/>
+    <circle r="94"  fill="#111111" stroke="#FFFFFF" stroke-width="1.5"/>
+    <circle r="94"  fill="#00B4E4" stroke="#1a9cc4" stroke-width="1.5"/>
+    <circle r="62"  fill="#F65058" stroke="#d43840" stroke-width="1.5"/>
+    <circle r="30"  fill="#FFE552" stroke="#c8a800" stroke-width="1.5"/>
+    <!-- Croix centrale -->
+    <line x1="-7" y1="0"  x2="7"  y2="0"
+          stroke="#8a7000" stroke-width="2" stroke-linecap="round"/>
+    <line x1="0"  y1="-7" x2="0"  y2="7"
+          stroke="#8a7000" stroke-width="2" stroke-linecap="round"/>
+    <!-- 3 impacts clSilver -->
+    <circle cx="38"  cy="-28" r="9" fill="#C0C0C0" stroke="#808080" stroke-width="1.5"/>
+    <circle cx="-44" cy="20"  r="9" fill="#C0C0C0" stroke="#808080" stroke-width="1.5"/>
+    <circle cx="10"  cy="22"  r="9" fill="#C0C0C0" stroke="#808080" stroke-width="1.5"/>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════
+       FLÈCHE
+       Axe : (400,430) → apex pointe (230,195)
+       Fût raccourci côté pointe : s'arrête à (242.9, 212.8)
+       Pointe = triangle (230.0,195.0) (248.6,208.7) (237.2,216.9)
+       ════════════════════════════════════════════════════════ -->
+  <g filter="url(#shadow)">
+    <!-- Fût — s'arrête AVANT la pointe -->
+    <line x1="400" y1="430" x2="242.9" y2="212.8"
+          stroke="#2e4a30" stroke-width="9" stroke-linecap="round"/>
+    <!-- Liseré lisibilité sur fond paille -->
+    <line x1="400" y1="430" x2="242.9" y2="212.8"
+          stroke="rgba(80,120,80,0.45)" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Pointe — apex=(230,195), base ⊥ au fût à (242.9,212.8) -->
+    <polygon points="230.0,195.0  248.6,208.7  237.2,216.9"
+             fill="#D8D8D8" stroke="#888888" stroke-width="1.5"
+             stroke-linejoin="round"/>
+
+    <!-- Empennage — 3 plumes calculées ⊥ à l'axe -->
+    <!-- Plume gauche : rouge -->
+    <path d="M400.0,430.0 L432.2,443.8 L417.6,454.3 Z"
+          fill="#F65058" stroke="#c02030" stroke-width="1"/>
+    <!-- Plume droite : rouge -->
+    <path d="M400.0,430.0 L403.0,464.9 L417.6,454.3 Z"
+          fill="#F65058" stroke="#c02030" stroke-width="1"/>
+    <!-- Plume centrale : or -->
+    <path d="M400.0,430.0 L421.7,446.4 L415.2,451.1 Z"
+          fill="#FFE552" stroke="#c0a800" stroke-width="1"/>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════
+       MINI CLAVIER — x=296, y=200 (remonté de 10px vs y=210)
+       ════════════════════════════════════════════════════════ -->
+  <rect x="296" y="200" width="182" height="218" rx="14" ry="14"
+        fill="url(#kbdGrad)" stroke="rgba(100,80,20,0.35)" stroke-width="2"
+        filter="url(#shadow)"/>
+
+  <!-- Rangée 1 : 10 | 9 -->
+  <rect x="306" y="210" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="344" y="229" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">10</text>
+  <rect x="392" y="210" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="430" y="229" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">9</text>
+
+  <!-- Rangée 2 : 8 | 7 -->
+  <rect x="306" y="244" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="344" y="263" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">8</text>
+  <rect x="392" y="244" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="430" y="263" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">7</text>
+
+  <!-- Rangée 3 : 6 | 5 -->
+  <rect x="306" y="278" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="344" y="297" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">6</text>
+  <rect x="392" y="278" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="430" y="297" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">5</text>
+
+  <!-- Rangée 4 : 4 | 3 -->
+  <rect x="306" y="312" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="344" y="331" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">4</text>
+  <rect x="392" y="312" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="430" y="331" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">3</text>
+
+  <!-- Rangée 5 : 2 | 1 -->
+  <rect x="306" y="346" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="344" y="365" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">2</text>
+  <rect x="392" y="346" width="76" height="28" rx="5" fill="#2e4a30" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="430" y="365" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="17" font-weight="700" fill="#ddeedd">1</text>
+
+  <!-- Rangée 6 : M | Eff -->
+  <rect x="306" y="380" width="76" height="28" rx="5"
+        fill="#1e2b1e" stroke="#3a5a3c" stroke-width="1"/>
+  <text x="344" y="399" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="16" font-weight="700" fill="#aaaaaa">M</text>
+  <rect x="392" y="380" width="76" height="28" rx="5"
+        fill="rgba(246,80,88,0.22)" stroke="rgba(246,80,88,0.45)" stroke-width="1"/>
+  <text x="430" y="399" text-anchor="middle" font-family="Arial Narrow,Arial,sans-serif"
+        font-size="13" font-weight="700" fill="#F65058">Eff</text>
+
+  <!-- ── Clou bordeaux coin haut-gauche ────────────────────── -->
+  <g transform="translate(52,52) rotate(45)">
+    <rect x="-10" y="-10" width="20" height="20" fill="#7A1212" rx="2"/>
+  </g>
+</svg>
