@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="École de Comptage des Points - L'outil gratuit d'entraînement au comptage pour archers. Simulez des volées et progressez sans stress.">
+<link rel="icon" href="./icon-192.png" type="image/png">
+<title>École de Comptage des Points - L'outil gratuit pour archers</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+    --primary:      #1a5c20;
+    --primary-dark: #0a1e0c;
+    --secondary:    #4a9e4e;
+    --accent:       #B8920A;
+    --text:         #2c3e50;
+    --text-light:   #6c757d;
+    --bg-light:     #f8f9fa;
+}
+body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; line-height:1.5; color:var(--text); }
+.container { max-width:1200px; margin:0 auto; padding:0 15px; }
+
+/* HEADER */
+header {
+    background: radial-gradient(circle, var(--primary) 0%, var(--primary-dark) 100%);
+    color:white; padding:20px 15px 24px; text-align:center;
+    box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+header h1 {
+    font-size:2.6em; margin-bottom:8px;
+    text-shadow:2px 2px 4px rgba(0,0,0,0.4);
+    display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap;
+}
+header h1 img { border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.5); flex-shrink:0; }
+header .version { font-size:1em; opacity:.85; margin-bottom:10px; color:#c8e6c9; }
+header .tagline  { font-size:1.2em; margin-top:10px; font-weight:300; opacity:.95; }
+header .cta-header { margin-top:22px; }
+header .btn-header {
+    display:inline-block; background:white; color:var(--primary);
+    padding:12px 30px; border-radius:50px; text-decoration:none;
+    font-weight:bold; font-size:1em; transition:all .3s;
+    box-shadow:0 4px 15px rgba(255,255,255,.25);
+}
+header .btn-header:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(255,255,255,.45); }
+
+/* SECTIONS COMMUNES */
+.features-section { background:white;        padding:30px 15px; }
+.how-it-works      { background:var(--bg-light); padding:30px 15px; }
+.modes-section     { background:white;        padding:30px 15px; }
+.specs             { background:var(--bg-light); padding:30px 15px; }
+.testimonials      { background:white;        padding:30px 15px; text-align:center; }
+section h2 { text-align:center; font-size:2em; margin-bottom:20px; color:var(--text); }
+
+/* FEATURES */
+.features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.feature-card {
+    background:var(--bg-light); padding:18px 14px; border-radius:6px;
+    text-align:center; transition:transform .3s; border-top:3px solid transparent;
+}
+.feature-card:hover { transform:translateY(-4px); box-shadow:0 4px 14px rgba(0,0,0,.1); border-top-color:var(--secondary); }
+.feature-icon { font-size:2.4em; margin-bottom:8px; }
+.feature-card h3 { font-size:1.2em; margin-bottom:6px; color:var(--primary); }
+.feature-card p  { color:var(--text-light); font-size:.95em; }
+
+/* HOW IT WORKS */
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:18px; max-width:900px; margin:0 auto; }
+.step { text-align:center; }
+.step-number {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:48px; height:48px; margin-bottom:10px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white; border-radius:50%; font-size:1.4em; font-weight:bold;
+}
+.step h3 { font-size:1.1em; margin-bottom:5px; color:var(--text); }
+.step p  { color:var(--text-light); font-size:.92em; }
+
+/* MODES */
+.modes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:900px; margin:0 auto; }
+.mode-card { padding:20px 14px; border-radius:6px; text-align:center; border:2px solid transparent; }
+.mode-card.salle    { background:#e3f2fd; border-color:#1565c0; }
+.mode-card.tae      { background:#e8f5e9; border-color:#2e7d32; }
+.mode-card.campagne { background:#fff3e0; border-color:#e65100; }
+.mode-card .mode-icon { font-size:2.2em; margin-bottom:8px; }
+.mode-card h3 { font-size:1.15em; font-weight:700; margin-bottom:6px; color:var(--text); }
+.mode-card p  { color:var(--text-light); font-size:.9em; line-height:1.5; }
+.mode-badge {
+    display:inline-block; margin-top:8px; padding:2px 10px;
+    border-radius:12px; font-size:.8em; font-weight:bold;
+    background:rgba(0,0,0,.08); color:var(--text);
+}
+
+/* CHALLENGE */
+.challenge-section {
+    background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+    color:white; padding:30px 15px; text-align:center;
+}
+.challenge-section h2 { font-size:2em; margin-bottom:10px; color:white; }
+.challenge-section > .container > p { font-size:1.1em; margin-bottom:0; opacity:.9; max-width:680px; margin-left:auto; margin-right:auto; }
+.challenge-grid { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:22px; }
+.challenge-stat {
+    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+    border-radius:8px; padding:16px 28px;
+}
+.challenge-stat .num { font-size:2.4em; font-weight:900; color:#ffe082; line-height:1; }
+.challenge-stat .lbl { font-size:.9em; opacity:.85; margin-top:4px; }
+
+/* SPECS */
+.specs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; max-width:860px; margin:0 auto; }
+.spec-item { display:flex; align-items:center; gap:14px; padding:14px; background:white; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+.spec-icon  { font-size:1.8em; flex-shrink:0; }
+.spec-text strong { display:block; color:var(--text); font-size:.95em; margin-bottom:2px; }
+.spec-text span   { color:var(--text-light); font-size:.85em; }
+
+/* TESTIMONIALS */
+.testimonials-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:12px; max-width:900px; margin:0 auto; }
+.testimonial { background:var(--bg-light); padding:14px; border-radius:6px; border-left:3px solid var(--primary); text-align:left; }
+.testimonial-stars  { color:#ffc107; margin-bottom:6px; }
+.testimonial-text   { font-style:italic; font-size:.95em; color:var(--text); margin-bottom:6px; }
+.testimonial-author { color:var(--text-light); font-weight:bold; font-size:.9em; }
+
+/* DOWNLOADS */
+.download-section { background:var(--bg-light); padding:28px 15px; text-align:center; }
+.download-section h2  { font-size:2em; color:var(--text); margin-bottom:6px; }
+.download-section > .container > p { font-size:1em; color:var(--text-light); margin-bottom:18px; }
+.download-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:10px; }
+.download-card { background:white; padding:16px 10px; border-radius:5px; transition:all .3s; border:1px solid transparent; }
+.download-card:hover { transform:translateY(-5px); box-shadow:0 4px 14px rgba(0,0,0,.12); border-color:var(--primary); }
+.download-card-icon { font-size:2.8em; margin-bottom:8px; }
+.download-card h3   { font-size:1.25em; margin-bottom:6px; color:var(--text); }
+.download-card p    { color:var(--text-light); margin-bottom:12px; font-size:.92em; }
+.download-wrapper   { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.download-btn {
+    display:inline-block; background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white; padding:7px 18px; border-radius:25px; text-decoration:none;
+    font-weight:bold; font-size:.97em; transition:all .3s;
+    box-shadow:0 2px 8px rgba(26,92,32,.35); cursor:pointer; border:none;
+}
+.download-btn:hover { transform:scale(1.05); box-shadow:0 3px 12px rgba(26,92,32,.55); }
+.download-btn.secondary { background:white; color:var(--primary); border:1px solid var(--primary); box-shadow:none; }
+.download-btn.secondary:hover { background:var(--primary); color:white; }
+.note-box { max-width:95%; margin:18px auto 0; padding:12px 16px; background:#fffde7; border-left:4px solid var(--accent); border-radius:4px; text-align:center; }
+.note-box p          { margin:0; color:var(--text); font-size:.95em; }
+.note-box p + p      { margin-top:8px; color:var(--text-light); font-size:.9em; }
+.btn-section { display:inline-block; background:var(--primary); color:white; padding:12px 30px; border-radius:50px; text-decoration:none; font-weight:bold; font-size:1em; transition:all .3s; margin-top:20px; }
+.btn-section:hover { transform:scale(1.05); }
+
+/* FOOTER */
+footer { background:#1a2c1d; color:white; padding:20px 15px; text-align:center; }
+footer p     { margin:8px 0; opacity:.9; font-size:.95em; }
+footer a     { color:#81c784; text-decoration:none; }
+footer a:hover { text-decoration:underline; }
+
+/* RESPONSIVE */
+@media (max-width:768px) {
+    header h1 { font-size:1.8em; }
+    header .tagline { font-size:1em; }
+    .features-grid, .modes-grid { grid-template-columns:1fr; }
+    .download-grid { grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>
+        <img src="./icon-192.png" alt="EcCoPo" width="110" height="110">
+        École de Comptage des Points
+        <img src="./icon-192.png" alt="EcCoPo" width="110" height="110">
+    </h1>
+    <div class="version">Version 4.2 | Mars 2026</div>
+    <p class="tagline">
+        L'outil gratuit d'entraînement au comptage pour archers<br>
+        Simulez des volées et progressez sans stress, sans connexion
+    </p>
+    <div class="cta-header">
+        <a class="btn-header" href="./#telechargements">📥 Télécharger maintenant</a>
+    </div>
+</header>
+
+<section class="features-section">
+    <div class="container">
+        <h2>✨ Fonctionnalités Principales</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>3 Modes de jeu</h3>
+                <p>Salle (3 flèches), T.A.E. (6 flèches) et Campagne (3 flèches) — un blason adapté à chaque discipline.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Mode Challenge</h3>
+                <p>10 volées chronométrées, 60 secondes chacune. Plus vous êtes rapide, plus vous marquez de points bonus.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔊</div>
+                <h3>Sons réalistes</h3>
+                <p>Son de vol de la flèche et d'impact synchronisés. Un signal sonore vous signale toute erreur de comptage.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📶</div>
+                <h3>100 % Hors-ligne</h3>
+                <p>Aucune connexion internet nécessaire. Fonctionne sur PC, tablette et smartphone.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🆓</div>
+                <h3>Totalement Gratuit</h3>
+                <p>Pas d'abonnement, pas de publicité, pas de limitations. Libre et open source.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🖥️</div>
+                <h3>Zéro installation</h3>
+                <p>Un simple fichier HTML à ouvrir dans votre navigateur. Rien d'autre à installer.</p>
+            </div>
+        </div>
+        <div style="text-align:center">
+            <a href="./#telechargements" class="btn-section">📥 Télécharger maintenant</a>
+        </div>
+    </div>
+</section>
+
+<section class="how-it-works">
+    <div class="container">
+        <h2>🎯 Comment ça marche ?</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Ouvrez</h3>
+                <p>Double-cliquez sur ecopo.html pour l'ouvrir dans votre navigateur. Aucune installation.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Choisissez</h3>
+                <p>Cliquez sur VOLÉE SALLE, T.A.E. ou CAMPAGNE selon votre discipline.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Observez</h3>
+                <p>Les flèches tombent une à une sur le blason avec leurs sons. Mémorisez les points.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Comptez</h3>
+                <p>Saisissez les points de chaque flèche puis le total. Validation instantanée.</p>
+            </div>
+        </div>
+        <div style="text-align:center">
+            <a href="./#telechargements" class="btn-section">📥 Télécharger maintenant</a>
+        </div>
+    </div>
+</section>
+
+<section class="modes-section">
+    <div class="container">
+        <h2>🏹 Les 3 modes de volée</h2>
+        <div class="modes-grid">
+            <div class="mode-card salle">
+                <div class="mode-icon">🔵</div>
+                <h3>Volée SALLE</h3>
+                <p>Blason 10 zones aux couleurs officielles (blanc, noir, bleu, rouge, or). Score de 10 à 1.</p>
+                <span class="mode-badge">3 flèches par volée</span>
+            </div>
+            <div class="mode-card tae">
+                <div class="mode-icon">🟢</div>
+                <h3>Volée T.A.E.</h3>
+                <p>Tir à l'Arc en Extérieur. Même blason et même barème que la salle, mais avec 6 flèches.</p>
+                <span class="mode-badge">6 flèches par volée</span>
+            </div>
+            <div class="mode-card campagne">
+                <div class="mode-icon">🟠</div>
+                <h3>Volée CAMPAGNE</h3>
+                <p>Blason réduit noir et or. Score de 6 à 1. Les zones extérieures comptent 0 (Manqué).</p>
+                <span class="mode-badge">3 flèches par volée</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="challenge-section">
+    <div class="container">
+        <h2>⏱️ Mode Challenge</h2>
+        <p>Évaluez votre rapidité et votre précision sur 10 volées consécutives. Plus vite vous comptez, plus vous gagnez de points bonus. Idéal pour progresser en autonomie ou créer une émulation au club.</p>
+        <div class="challenge-grid">
+            <div class="challenge-stat">
+                <div class="num">10</div>
+                <div class="lbl">volées consécutives</div>
+            </div>
+            <div class="challenge-stat">
+                <div class="num">60s</div>
+                <div class="lbl">par volée maximum</div>
+            </div>
+            <div class="challenge-stat">
+                <div class="num">+N</div>
+                <div class="lbl">pts bonus = secondes restantes</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <h2>💬 Ils l'utilisent déjà</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial">
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">« Enfin un outil pour s'entraîner au comptage sans la pression d'une compétition. Mes débutants progressent beaucoup plus vite ! »</p>
+                <p class="testimonial-author">— Christelle, entraîneuse</p>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">« Le mode Challenge est parfait pour les séances de groupe. On se croirait dans une vraie compétition ! »</p>
+                <p class="testimonial-author">— Marc, Arc Classique</p>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">« Simple, efficace et gratuit. Je l'utilise sur ma tablette au club. Aucune installation, rien à paramétrer. »</p>
+                <p class="testimonial-author">— Sophie, Arc Nu</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="specs">
+    <div class="container">
+        <h2>📋 Spécifications</h2>
+        <div class="specs-grid">
+            <div class="spec-item">
+                <div class="spec-icon">🌐</div>
+                <div class="spec-text">
+                    <strong>Navigateurs</strong>
+                    <span>Chrome, Edge, Brave (recommandés) · Firefox, Safari</span>
+                </div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-icon">💻</div>
+                <div class="spec-text">
+                    <strong>Systèmes</strong>
+                    <span>Windows, macOS, Linux, Android, iOS</span>
+                </div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-icon">📦</div>
+                <div class="spec-text">
+                    <strong>Taille</strong>
+                    <span>~260 Ko — sons inclus, aucun fichier externe</span>
+                </div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-icon">📶</div>
+                <div class="spec-text">
+                    <strong>Connexion</strong>
+                    <span>Aucune requise — 100 % local</span>
+                </div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-icon">📱</div>
+                <div class="spec-text">
+                    <strong>Installation PWA</strong>
+                    <span>Installable comme appli autonome (Chrome/Edge/Brave)</span>
+                </div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-icon">🔓</div>
+                <div class="spec-text">
+                    <strong>Licence</strong>
+                    <span>Open Source — utilisation libre</span>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center">
+            <a href="./#telechargements" class="btn-section">📥 Télécharger maintenant</a>
+        </div>
+    </div>
+</section>
+
+<section class="download-section" id="telechargements">
+    <div class="container">
+        <h2>📥 Téléchargements</h2>
+        <p>Tout ce dont vous avez besoin pour démarrer</p>
+        <div class="download-grid">
+
+            <div class="download-card">
+                <div class="download-card-icon">🚀</div>
+                <h3>Lancer l'application</h3>
+                <p>Testez directement dans votre navigateur — aucun téléchargement nécessaire.</p>
+                <div class="download-wrapper">
+                    <a href="./ecopo.html" class="download-btn">Ouvrir dans ce navigateur</a>
+                </div>
+                <p style="font-size:.82em; margin-top:12px; color:var(--text-light)">HTML · CSS · JS | Gratuit | ~250 Ko</p>
+            </div>
+
+            <div class="download-card">
+                <div class="download-card-icon">🗜️</div>
+                <h3>Archive ZIP</h3>
+                <p>Tous les fichiers de l'application prêts à décompresser dans un dossier de votre choix.</p>
+                <div class="download-wrapper">
+                    <a href="./EcCoPo_V4.2.zip" class="download-btn">Télécharger l'archive</a>
+                </div>
+                <p style="font-size:.82em; margin-top:12px; color:var(--text-light)">ZIP | Gratuit | ~260 Ko</p>
+            </div>
+
+            <div class="download-card">
+                <div class="download-card-icon">📖</div>
+                <h3>Manuel Utilisateur</h3>
+                <p>Guide complet pas à pas : modes, comptage, Challenge, questions fréquentes.</p>
+                <div class="download-wrapper">
+                    <a href="./EcCoPo_Manuel_Utilisateur.docx" target="_blank" class="download-btn secondary">Consulter le Manuel</a>
+                </div>
+                <p style="font-size:.82em; margin-top:12px; color:var(--text-light)">Word (.docx) | ~35 Ko</p>
+            </div>
+
+        </div>
+
+        <div class="note-box">
+            <p><strong>📌 Installation PWA (Chrome / Edge / Brave) :</strong></p>
+            <p>Pour utiliser l'application comme une appli autonome (sans barre d'adresse, icône sur le bureau), servez-la via un serveur local. Exemple : <code>python -m http.server 8080</code> dans le dossier, puis ouvrir <em>http://localhost:8080/ecopo.html</em> dans Chrome ou Edge.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p><strong>École de Comptage des Points V4.2</strong></p>
+        <p>© 2016-2026 | Jean-Michel Grelaud</p>
+        <p style="margin-top:14px">Développé avec ❤️ par un archer, pour les archers</p>
+        <p style="margin-top:12px; font-size:.85em; opacity:.7">
+            Projet open source | <a href="mailto:jeanmichel.grelaud@gmail.com">Contact</a>
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>
