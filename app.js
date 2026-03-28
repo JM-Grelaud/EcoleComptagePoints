@@ -366,17 +366,22 @@ function launchVolley() {
   /* Redessine le blason avec les impacts */
   drawTarget(canvas, state.mode, state.impacts);
 
-  /* Séquence par flèche : whoosh → impact sonore → dessin
-     (colle à la réalité : on entend la flèche avant de voir l'impact) */
-  const flightMs  = 420;   /* durée du vol whoosh → impact */
-  const spacingMs = 700;   /* intervalle entre deux flèches */
+  /* Séquence par flèche : whoosh → impact sonore → dessin */
+  const flightMs  = 420;
+  const spacingMs = 700;
+
+  /* Boutons de mode inutilisables pendant toute la génération */
+  enableModeButtons(false);
+
   state.impacts.forEach((imp, i) => {
-    const t = i * spacingMs;
-    setTimeout(() => playWhoosh(),  t);
+    const t      = i * spacingMs;
+    const isLast = (i === state.impacts.length - 1);
+    setTimeout(() => playWhoosh(), t);
     setTimeout(() => {
       playImpact();
       imp.visible = true;
       drawTarget(canvas, state.mode, state.impacts);
+      if (isLast) enableModeButtons(true);
     }, t + flightMs);
   });
 
