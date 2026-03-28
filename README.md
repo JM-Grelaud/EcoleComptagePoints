@@ -14,7 +14,7 @@ Je partage avec vous un outil que j'ai développé : l'**École de Comptage des 
 ✅ Compatible PC, Mac, tablette, smartphone
 
 **Super utile pour :**
-• S'entraîner au comptage en solo, à la maison
+• S'entraîner au comptage en solo, à la maison, sans monter mon arc
 • Préparer sereinement une première compétition
 • Comprendre ENFIN 😉 le barème du mode Campagne
 • Progresser entre deux entraînements au club
@@ -31,7 +31,7 @@ Un vrai plus pour vos séances de formation aux règles de compétition, sans ex
 💬 **Retours d'utilisateurs :**
 *"J'ai enfin compris le barème du Campagne en cinq minutes !"* — Marc, Arc Classique
 *"Indispensable pour préparer mes premières compétitions à la maison."* — Sophie, Arc Nu
-*"On l'utilise au club pour les débutants. Un vrai plus pour nos séances !"* — Archers de Laillé
+*"L'outil, créé pour le club, est utilisé par les néo-compétiteurs. Un vrai plus pour nos séances !"* — Les Archers de Laillé
 
 🔗 Pour l'obtenir :
 https://jm-grelaud.github.io/EcoleComptagePoints 😊
