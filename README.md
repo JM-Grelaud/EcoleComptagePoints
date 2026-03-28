@@ -1,7 +1,7 @@
 🎯 Archers, je vous salue !
 Je partage avec vous un outil que j'ai développé : l'**École de Comptage des Points** !
 
-**C'est quoi ?** Une application gratuite qui simule des volées de flèches sur un blason et te demande d'en compter les points — comme une séance d'entraînement au comptage, sans le stress d'une vraie compétition.
+**C'est quoi ?** Une application gratuite qui simule des volées de flèches sur un blason et demande d'en compter les points — comme une séance d'entraînement au comptage, sans le stress d'une vraie compétition.
 
 **Comment ça marche ?** L'École de Comptage des Points s'exécute dans une fenêtre de ton navigateur. Ouvre l'appli → choisis ton mode → observe les impacts → saisis les points flèche par flèche → valide ton total → recommence !
 
