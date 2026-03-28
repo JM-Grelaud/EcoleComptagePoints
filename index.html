@@ -416,7 +416,27 @@ footer a:hover { text-decoration:underline; }
         </div>
     </div>
 </section>
+    
+<script data-goatcounter="https://jgrmiroirvideo.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
+<script>
+    document.addEventListener('click', function(e) {
+        // On cherche si on a cliqué sur un élément avec la classe btn-counter
+        const btn = e.target.closest('.btn-counter');
+        if (btn) {
+            const key = btn.getAttribute('data-gc-id');
+            
+            // Envoi de l'événement à GoatCounter
+            if (window.goatcounter && window.goatcounter.count) {
+                window.goatcounter.count({
+                    path: key,
+                    title: 'Clic: ' + key,
+                    event: true
+                });
+            }
+        }
+    });
+</script>
 <footer>
     <div class="container">
         <p><strong>École de Comptage des Points V4.2</strong></p>
