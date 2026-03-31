@@ -71,7 +71,9 @@ function impactRadius(R) {
    LAM'TECH — bandes horizontales aléatoires, mises en cache
    ================================================================ */
 const LAMTECH_COLORS = [
-  '#000000', '#000000', '#000000',   /* noir 3× plus fréquent */
+  '#000000', '#000000', '#000000', '#000000',
+  '#000000', '#000000', '#000000', '#000000', 
+  '#000000', '#000000', '#000000', '#000000',   /* noir 12× plus fréquent */
   '#F65058',                          /* rouge */
   '#00B4E4',                          /* bleu */
   '#FFE552',                          /* jaune */
