@@ -193,19 +193,41 @@ function drawTarget(canvas, mode, impacts) {
 
   const rImp = impactRadius(R);
 
-  impacts.forEach((imp) => {
+  impacts.forEach((imp, idx) => {
     if (!imp.visible) return;   /* révélation progressive — ignorer si pas encore affiché */
     const px = cx + imp.nx * R;
     const py = cy + imp.ny * R;
 
+    /* Épaisseur du périmètre — identique pour le cercle et les rayons */
+    const strokeW = Math.max(1, rImp * 0.22);
+
+    /* ── Cercle argenté ── */
     ctx.beginPath();
     ctx.arc(px, py, rImp, 0, Math.PI * 2);
-    ctx.fillStyle   = '#C0C0C0';   // clSilver
+    ctx.fillStyle   = '#C0C0C0';
     ctx.fill();
-    ctx.strokeStyle = '#808080';   // clGray
-    ctx.lineWidth   = Math.max(1, rImp * 0.22);
+    ctx.strokeStyle = '#808080';
+    ctx.lineWidth   = strokeW;
     ctx.stroke();
-  });
+
+/* ── 3 rayons à 120° (simulation plumes) ──
+       Angle de base : chaque impact a une orientation fixe mais distincte
+       Couleurs : rayon 0 = blanc, rayons 1 & 2 = rouge */
+    const baseAngle = (idx * 40) * Math.PI / 180;   /* décalage léger entre impacts */
+    const rayColors = ['#002654', '#FFFFFF', '#ED2939']; // Bleu, Blanc, Rouge
+    const rExtended = rImp * 1.50; // Calcul du rayon avec débordement de 1/2
+
+    ctx.lineWidth = strokeW;
+    for (let r = 0; r < 3; r++) {
+      const angle = baseAngle + r * (2 * Math.PI / 3);
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      // Utilisation de rExtended au lieu de rImp pour le point final
+      ctx.lineTo(px + rExtended * Math.cos(angle), py + rExtended * Math.sin(angle));
+      ctx.strokeStyle = rayColors[r];
+      ctx.stroke();
+    }
+	});
 }
 
 /* ================================================================
