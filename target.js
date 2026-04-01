@@ -188,17 +188,17 @@ function drawTarget(canvas, mode, impacts) {
     ctx.stroke();
   });
 
-  /* ── 6. Impacts ──────────────────────────────────────────────── */
+/* ── 6. Impacts ──────────────────────────────────────────────── */
   if (!impacts || impacts.length === 0) return;
 
   const rImp = impactRadius(R);
 
   impacts.forEach((imp, idx) => {
-    if (!imp.visible) return;   /* révélation progressive — ignorer si pas encore affiché */
+    if (!imp.visible) return;   /* révélation progressive */
     const px = cx + imp.nx * R;
     const py = cy + imp.ny * R;
 
-    /* Épaisseur du périmètre — identique pour le cercle et les rayons */
+    /* Épaisseur du périmètre du cercle */
     const strokeW = Math.max(1, rImp * 0.22);
 
     /* ── Cercle argenté ── */
@@ -210,25 +210,36 @@ function drawTarget(canvas, mode, impacts) {
     ctx.lineWidth   = strokeW;
     ctx.stroke();
 
-/* ── 3 rayons à 120° (simulation plumes) ──
-       Angle de base : chaque impact a une orientation fixe mais distincte
-       Couleurs : rayon 0 = blanc, rayons 1 & 2 = rouge */
-    const baseAngle = (idx * 40) * Math.PI / 180;   /* décalage léger entre impacts */
-    const rayColors = ['#002654', '#FFFFFF', '#ED2939']; // Bleu, Blanc, Rouge
-    const rExtended = rImp * 1.50; // Calcul du rayon avec débordement de 1/2
+/* ── 3 plumes (Bleu, Blanc, Rouge) ── */
+    const baseAngle = (idx * 40) * Math.PI / 180;
+	// Index 0 : Orange Fluo | Index 1 & 2 : Vert Fluo
+    const rayColors = ['#FF7600', '#39FF14', '#39FF14'];
+    
+    ctx.lineWidth = strokeW * 2; 
+    ctx.lineCap = 'round';
 
-    ctx.lineWidth = strokeW;
     for (let r = 0; r < 3; r++) {
       const angle = baseAngle + r * (2 * Math.PI / 3);
+      
+      // Départ : sur le bord (1 * rImp)
+      const startX = px + rImp * Math.cos(angle);
+      const startY = py + rImp * Math.sin(angle);
+      
+      // Arrivée : Départ (1 * rImp) + Longueur (1.2 * rImp) = 2.2 * rImp
+      const endX = px + (rImp * 2.2) * Math.cos(angle);
+      const endY = py + (rImp * 2.2) * Math.sin(angle);
+
       ctx.beginPath();
-      ctx.moveTo(px, py);
-      // Utilisation de rExtended au lieu de rImp pour le point final
-      ctx.lineTo(px + rExtended * Math.cos(angle), py + rExtended * Math.sin(angle));
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
       ctx.strokeStyle = rayColors[r];
       ctx.stroke();
     }
-	});
-}
+    
+    // Reset du lineCap pour ne pas affecter les autres dessins si nécessaire
+    ctx.lineCap = 'butt'; 
+  });
+ }
 
 /* ================================================================
    generateImpacts(nbArrows, canvas, mode)
