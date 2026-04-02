@@ -120,6 +120,90 @@ function drawTarget(canvas, mode, impacts) {
   /* ── 1. Fond LAM'TECH — bandes aléatoires 2-6px ─────────────── */
   _drawLamtech(ctx, W, H);
 
+  /* ── 1b. Supports chêne (haut et bas) ───────────────────────── */
+  const plankH  = Math.max(8, size * 0.028);   /* épaisseur des planches */
+  const plankC  = 'rgb(140,95,80)';
+  const plankD  = 'rgb(100,65,50)';            /* ombre/grain */
+  /* Planche haute */
+  ctx.fillStyle = plankC;
+  ctx.fillRect(0, 0, W, plankH);
+  ctx.fillStyle = plankD;
+  ctx.fillRect(0, plankH - 2, W, 2);
+  /* Planche basse */
+  ctx.fillStyle = plankC;
+  ctx.fillRect(0, H - plankH, W, plankH);
+  ctx.fillStyle = plankD;
+  ctx.fillRect(0, H - plankH, W, 2);
+
+/* ── 1c. Sangles à cliquet (gauche et droite) ────────────────── */
+  const strapW  = Math.max(4, size * 0.012);   /* Largeur sangle */
+  
+  // On décolle les sangles du bord (environ 1.5x leur largeur) pour loger les cliquets
+  const sideMargin = strapW * 1.5; 
+  const strapX1 = sideMargin;                           
+  const strapX2 = W - strapW - sideMargin;                  
+  
+  const strapC  = 'rgb(0,0,255)';
+  const strapD  = 'rgb(0,0,160)';              
+  
+  const ratchetGold  = '#B8860B'; 
+  const ratchetLight = '#FFD700'; 
+  const ratchetDark  = '#5D4037'; 
+  
+  [strapX1, strapX2].forEach((sx, i) => {
+    // 1. Dessin de la sangle bleue
+    ctx.fillStyle = strapC;
+    ctx.fillRect(sx, 0, strapW, H);
+    ctx.fillStyle = strapD;
+    ctx.fillRect(sx + strapW * 0.7, 0, strapW * 0.2, H);
+
+    // 2. Configuration du cliquet
+    const ry = i === 0 ? H * 0.25 : H * 0.65; // Désalignement vertical
+    const rH = strapW * 4;       
+    const rW = strapW * 1.8; // Largeur du boîtier doré
+    
+    // Centrage du cliquet sur la sangle :
+    // On aligne le centre du cliquet (rx + rW/2) avec le centre de la sangle (sx + strapW/2)
+    const rx = sx + (strapW / 2) - (rW / 2);
+
+    ctx.save();
+    
+    // -- Corps principal (Boîtier) --
+    ctx.fillStyle = ratchetGold;
+    ctx.strokeStyle = ratchetDark;
+    ctx.lineWidth = 1;
+    ctx.fillRect(rx, ry, rW, rH);
+    ctx.strokeRect(rx, ry, rW, rH);
+    
+    // -- Tambour central --
+    ctx.beginPath();
+    ctx.arc(rx + rW/2, ry + rH*0.4, rW/2.5, 0, Math.PI * 2);
+    ctx.fillStyle = ratchetDark;
+    ctx.fill();
+
+    // -- Poignée (Levier) : Orientée vers l'extérieur --
+    ctx.fillStyle = ratchetGold;
+    ctx.beginPath();
+    ctx.moveTo(rx + rW/2, ry + rH*0.4);
+    
+    // Direction : vers la gauche pour la sangle 0, vers la droite pour la sangle 1
+    const dir = (i === 0) ? -1 : 1;
+    const handleLength = rW * 1.2;
+    
+    ctx.lineTo(rx + rW/2 + (handleLength * dir), ry - rH*0.2);
+    ctx.lineTo(rx + rW/2 + (handleLength * 1.2 * dir), ry - rH*0.1);
+    ctx.lineTo(rx + rW/2, ry + rH*0.6);
+    
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // -- Reflet pour l'aspect métallique --
+    ctx.fillStyle = ratchetLight;
+    ctx.fillRect(rx + 2, ry + 2, 1.5, rH - 4);
+
+    ctx.restore();
+  });  
   /* ── 2. Carré blanc ──────────────────────────────────────────── */
   ctx.fillStyle = '#FFFFFF';
   ctx.fillRect(sqX, sqY, sqSize, sqSize);
