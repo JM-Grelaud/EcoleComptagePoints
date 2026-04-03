@@ -201,6 +201,33 @@ function setKeyboardEnabled(enabled) {
   });
 }
 
+/**
+ * Phase TOTAL : masque toutes les touches sauf Eff,
+ * qui est élargie à toute la largeur du clavier.
+ */
+function setKeyboardTotalMode() {
+  document.querySelectorAll('#keyGrid .key').forEach(k => {
+    if (k.classList.contains('key-eff')) {
+      k.style.gridColumn = '1 / -1';   /* pleine largeur */
+      k.style.display    = '';
+      k.disabled         = false;
+    } else {
+      k.style.display = 'none';
+    }
+  });
+}
+
+/**
+ * Restaure le clavier à son état normal (après total correct).
+ * Appelé au début de chaque launchVolley.
+ */
+function restoreKeyboard() {
+  document.querySelectorAll('#keyGrid .key').forEach(k => {
+    k.style.display    = '';
+    k.style.gridColumn = '';
+  });
+}
+
 /** En phase TOTAL la touche M affiche "0" (comportement Pascal) */
 function updateMKey(inTotalPhase) {
   const mKey = keyGrid.querySelector('.key-m');
@@ -278,11 +305,12 @@ function onKeyClick(e) {
 
 /** Passe en phase TOTAL (équivalent ClavierOnOff(kClavTot)) */
 function switchToTotalPhase() {
-  state.phase      = 'total';
+  state.phase          = 'total';
   totalInput.disabled  = false;
   totalInput.value     = '';
   totalInput.className = '';
   updateMKey(true);
+  setKeyboardTotalMode();   /* masque tout sauf Eff, élargit Eff */
   totalInput.focus();
   showPopup('Entrez le total des points de la volée.', 'info');
 }
@@ -360,6 +388,7 @@ function launchVolley() {
   totalInput.disabled  = true;
   totalInput.className = '';
   updateMKey(false);
+  restoreKeyboard();          /* remet le clavier dans son état normal */
   setKeyboardEnabled(true);
   enableModeButtons(true);   /* actifs tant qu'aucune flèche n'est saisie */
 
