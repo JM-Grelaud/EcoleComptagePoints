@@ -1,7 +1,7 @@
 🎯 Archers, je vous salue !
 Je partage avec vous un outil que j'ai développé : l'**École de Comptage des Points** !
 
-**C'est quoi ?** Une application gratuite qui simule des volées de flèches sur un blason et demande d'en compter les points — comme une séance d'entraînement au comptage, sans le stress d'une vraie compétition.
+**C'est quoi ?** Une application gratuite qui simule des volées de flèches sur un blason et demande d'en compter les points — comme une séance d'entraînement au comptage, sans avoir à monter son arc et sans le stress d'une compétition.
 
 **Comment ça marche ?** L'École de Comptage des Points s'exécute dans une fenêtre de ton navigateur. Ouvre l'appli → choisis ton mode → observe les impacts → saisis les points flèche par flèche → valide ton total → recommence !
 
@@ -16,7 +16,7 @@ Je partage avec vous un outil que j'ai développé : l'**École de Comptage des 
 **Super utile pour :**
 • S'entraîner au comptage en solo, à la maison, sans monter mon arc
 • Préparer sereinement une première compétition
-• Comprendre ENFIN 😉 le barème du mode Campagne
+• Apprendre rapidement 😉 le barème du tir Campagne
 • Progresser entre deux entraînements au club
 • Tester le mode Challenge entre archers du même club
 
@@ -29,7 +29,7 @@ Installez un poste École de Comptage des Points dans votre salle :
 Un vrai plus pour vos séances de formation aux règles de compétition, sans exploser le budget. Idéal aussi pour les stages et les cours débutants.
 
 💬 **Retours d'utilisateurs :**
-*"J'ai enfin compris le barème du Campagne en cinq minutes !"* — Marc, Arc Classique
+*"J'ai enfin compris le barème du Tir Campagne en cinq minutes !"* — Marc, Arc Classique
 *"Indispensable pour préparer mes premières compétitions à la maison."* — Sophie, Arc Nu
 *"L'outil, créé pour le club, est utilisé par les néo-compétiteurs. Un vrai plus pour nos séances !"* — Les Archers de Laillé
 
