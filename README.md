@@ -5,7 +5,7 @@ Je partage avec vous un outil que j'ai développé : l'**École de Comptage des 
 
 **Comment ça marche ?** L'École de Comptage des Points s'exécute dans une fenêtre de ton navigateur. Ouvre l'appli → choisis ton mode → observe les impacts → saisis les points flèche par flèche → valide ton total → recommence !
 
-**Pourquoi c'est génial :**
+**Pourquoi c'est astucieux :**
 ✅ 100% GRATUIT — zéro abonnement, zéro pub
 ✅ Ultra simple — un clic et c'est parti
 ✅ 100% hors-ligne — aucune connexion requise
