@@ -1,7 +1,7 @@
 {
-  "name": "Ãcole de Comptage des Points",
+  "name": "École de Comptage des Points",
   "short_name": "EcCoPo",
-  "description": "EntraÃ®nement au comptage des points en tir Ã  l'arc â V4.3",
+  "description": "Entraînement au comptage des points en tir à l'arc — V4.3",
   "start_url": "./ecopo.html",
   "display": "standalone",
   "orientation": "landscape",
