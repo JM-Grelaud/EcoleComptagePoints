@@ -1,28 +1,28 @@
 /* ================================================================
-   app.js — Logique de l'application
-   Port de TfrmMain (main.pas) — Archers de Laillé V4.2
+   app.js â Logique de l'application
+   Port de TfrmMain (main.pas) â Archers de LaillÃ© V4.3
    ================================================================ */
 
 'use strict';
 
 /* ================================================================
-   État global (équivalent des variables globales Pascal)
+   Ãtat global (Ã©quivalent des variables globales Pascal)
    ================================================================ */
 const state = {
   /* Mode courant */
   mode:       null,    // 'SALLE' | 'TAE' | 'CAMPAGNE'
   nbArrows:   0,       // iNbFleches
 
-  /* Impacts de la volée courante */
+  /* Impacts de la volÃ©e courante */
   impacts:    [],      // arrImpact (x, y, points, entered)
   nbEntered:  0,       // iNbSaisie
-  totalPts:   0,       // iTOTAL (calculé)
+  totalPts:   0,       // iTOTAL (calculÃ©)
 
   /* Phase de saisie */
-  // 'idle'   → pas de volée lancée
-  // 'arrows' → saisie des flèches (kClavFle)
-  // 'total'  → saisie du total (kClavTot)
-  // 'done'   → volée validée
+  // 'idle'   â pas de volÃ©e lancÃ©e
+  // 'arrows' â saisie des flÃ¨ches (kClavFle)
+  // 'total'  â saisie du total (kClavTot)
+  // 'done'   â volÃ©e validÃ©e
   phase: 'idle',
 
   /* Mode JEU / Challenge */
@@ -31,12 +31,15 @@ const state = {
   chalTimer:    -1,    // iDurJeu
   chalVolleys:  0,     // iVolJeu
   chalScore:    0,     // iScoJeu
-  chalLabel:    '',    // sResultat (début)
+  chalLabel:    '',    // sResultat (dÃ©but)
   timerHandle:  null,  // setInterval handle
+
+  /* Joueur identifiÃ© au dÃ©marrage du challenge */
+  player:       null,  // { prenom, nom, licence }
 };
 
 /* ================================================================
-   Références DOM
+   RÃ©fÃ©rences DOM
    ================================================================ */
 const canvas       = document.getElementById('targetCanvas');
 const timerEl      = document.getElementById('timerDisplay');
@@ -48,16 +51,23 @@ const btnSALLE     = document.getElementById('btnSALLE');
 const btnTAE       = document.getElementById('btnTAE');
 const btnCAMPAGNE  = document.getElementById('btnCAMPAGNE');
 const btnJEU       = document.getElementById('btnJEU');
+const btnMANUEL    = document.getElementById('btnMANUEL');
 const btnClose     = document.getElementById('btnClose');
 const modalOverlay = document.getElementById('modalOverlay');
 const modalMsg     = document.getElementById('modalMsg');
 const modalOK      = document.getElementById('modalOK');
 const confirmOverlay = document.getElementById('confirmOverlay');
 const confirmYes     = document.getElementById('confirmYes');
-const confirmNo      = document.getElementById('confirmNo');
+const confirmNo     = document.getElementById('confirmNo');
+const playerOverlay = document.getElementById('playerOverlay');
+const playerPrenom  = document.getElementById('playerPrenom');
+const playerNom     = document.getElementById('playerNom');
+const playerLicence = document.getElementById('playerLicence');
+const playerOK      = document.getElementById('playerOK');
+const playerCancel  = document.getElementById('playerCancel');
 
 /* ================================================================
-   Redimensionnement Canvas (équivalent FormResize)
+   Redimensionnement Canvas (Ã©quivalent FormResize)
    ================================================================ */
 function resizeCanvas() {
   const wrapper = canvas.parentElement;
@@ -72,8 +82,8 @@ function resizeCanvas() {
 }
 
 /**
- * Positionne le chrono dans le coin supérieur gauche du carré blanc,
- * avec un petit décalage intérieur pour ne pas chevaucher le bord.
+ * Positionne le chrono dans le coin supÃ©rieur gauche du carrÃ© blanc,
+ * avec un petit dÃ©calage intÃ©rieur pour ne pas chevaucher le bord.
  */
 function positionTimer() {
   const panel = document.querySelector('.side-panel');
@@ -83,27 +93,27 @@ function positionTimer() {
   const arenaRect = arena.getBoundingClientRect();
   const panelRect = panel.getBoundingClientRect();
 
-  /* Même left que le panneau, 20px au-dessus */
+  /* MÃªme left que le panneau, 20px au-dessus */
   timerEl.style.left  = Math.round(panelRect.left - arenaRect.left) + 'px';
   timerEl.style.top   = Math.round(panelRect.top  - arenaRect.top - timerEl.offsetHeight - 20) + 'px';
   timerEl.style.right = 'auto';
-  /* Même largeur que le panneau pour l'alignement */
+  /* MÃªme largeur que le panneau pour l'alignement */
   timerEl.style.width = panel.offsetWidth + 'px';
   timerEl.style.textAlign = 'center';
 }
 
 /**
- * (B) Positionne le panneau latéral dynamiquement :
- * - horizontalement : bord gauche aligné sur le bord droit du blason
- *   + un espacement égal à la marge LAM'TECH (espace entre blason et bord canvas)
- * - verticalement   : centre géométrique aligné sur le centre du blason (cy)
+ * (B) Positionne le panneau latÃ©ral dynamiquement :
+ * - horizontalement : bord gauche alignÃ© sur le bord droit du blason
+ *   + un espacement Ã©gal Ã  la marge LAM'TECH (espace entre blason et bord canvas)
+ * - verticalement   : centre gÃ©omÃ©trique alignÃ© sur le centre du blason (cy)
  */
 function positionPanel() {
   const panel = document.querySelector('.side-panel');
   if (!panel) return;
 
-  /* Paramètres de mise en page du canvas (en pixels canvas) */
-  const size   = canvas.width;                     /* canvas carré */
+  /* ParamÃ¨tres de mise en page du canvas (en pixels canvas) */
+  const size   = canvas.width;                     /* canvas carrÃ© */
   const margin = size * 0.038 + 50;                /* marge LAM'TECH */
   const sqSize = size - 2 * margin;
   const R      = sqSize * 0.476;                   /* rayon zone 1 */
@@ -117,10 +127,10 @@ function positionPanel() {
   const canvasLeft = canvasRect.left - arenaRect.left;
   const canvasTop  = canvasRect.top  - arenaRect.top;
 
-  /* Bord droit du blason en coordonnées arena */
+  /* Bord droit du blason en coordonnÃ©es arena */
   const blasonRightInArena = canvasLeft + cx + R;
 
-  /* Espacement = même que la marge LAM'TECH
+  /* Espacement = mÃªme que la marge LAM'TECH
      (distance entre bord blason et bord canvas) */
   const spacing = size / 2 - R;   /* = margin environ */
 
@@ -133,12 +143,12 @@ function positionPanel() {
   panel.style.right = 'auto';
 }
 
-/* ResizeObserver → recalcul automatique */
+/* ResizeObserver â recalcul automatique */
 const ro = new ResizeObserver(() => requestAnimationFrame(resizeCanvas));
 ro.observe(canvas.parentElement);
 
 /* ================================================================
-   Champs flèches (Point1..6 — TEdit)
+   Champs flÃ¨ches (Point1..6 â TEdit)
    ================================================================ */
 function buildArrowFields(nb) {
   arrowList.innerHTML = '';
@@ -167,13 +177,13 @@ function clearArrowFields() {
 }
 
 /* ================================================================
-   Clavier virtuel (Clavier panel — btn1..btn10, btnM, btnEff)
+   Clavier virtuel (Clavier panel â btn1..btn10, btnM, btnEff)
    ================================================================ */
 
 /**
  * buildKeyboard(maxVal)
  * maxVal = 10 pour SALLE/TAE, 6 pour CAMPAGNE
- * Ordre : maxVal → 1, puis M, puis Eff (2 colonnes)
+ * Ordre : maxVal â 1, puis M, puis Eff (2 colonnes)
  */
 function buildKeyboard(maxVal) {
   keyGrid.innerHTML = '';
@@ -194,7 +204,7 @@ function makeKey(label, value, extraClass) {
   return btn;
 }
 
-/** Active/désactive toutes les touches (ClavierOnOff) */
+/** Active/dÃ©sactive toutes les touches (ClavierOnOff) */
 function setKeyboardEnabled(enabled) {
   document.querySelectorAll('#keyGrid .key').forEach(k => {
     k.disabled = !enabled;
@@ -203,7 +213,7 @@ function setKeyboardEnabled(enabled) {
 
 /**
  * Phase TOTAL : masque toutes les touches sauf Eff,
- * qui est élargie à toute la largeur du clavier.
+ * qui est Ã©largie Ã  toute la largeur du clavier.
  */
 function setKeyboardTotalMode() {
   document.querySelectorAll('#keyGrid .key').forEach(k => {
@@ -218,8 +228,8 @@ function setKeyboardTotalMode() {
 }
 
 /**
- * Restaure le clavier à son état normal (après total correct).
- * Appelé au début de chaque launchVolley.
+ * Restaure le clavier Ã  son Ã©tat normal (aprÃ¨s total correct).
+ * AppelÃ© au dÃ©but de chaque launchVolley.
  */
 function restoreKeyboard() {
   document.querySelectorAll('#keyGrid .key').forEach(k => {
@@ -240,12 +250,12 @@ function updateMKey(inTotalPhase) {
 function onKeyClick(e) {
   const val = parseInt(e.currentTarget.dataset.value, 10);
 
-  /* ── Touche Eff (-1) ─────────────────────────────────────── */
+  /* ââ Touche Eff (-1) âââââââââââââââââââââââââââââââââââââââ */
   if (val === -1) {
     if (state.phase === 'total') {
       totalInput.value = '';
       totalInput.classList.remove('correct', 'error');
-      /* Refocus après le clic sur le bouton */
+      /* Refocus aprÃ¨s le clic sur le bouton */
       requestAnimationFrame(() => totalInput.focus());
     } else if (state.phase === 'arrows') {
       state.impacts.forEach(imp => { imp.entered = false; });
@@ -257,16 +267,16 @@ function onKeyClick(e) {
     return;
   }
 
-  /* ── Phase TOTAL ─────────────────────────────────────────── */
+  /* ââ Phase TOTAL âââââââââââââââââââââââââââââââââââââââââââ */
   if (state.phase === 'total') {
     totalInput.value += String(val);
     validateTotal();
-    /* Refocus systématique : le clic sur la touche a volé le focus */
+    /* Refocus systÃ©matique : le clic sur la touche a volÃ© le focus */
     requestAnimationFrame(() => totalInput.focus());
     return;
   }
 
-  /* ── Phase FLECHES ───────────────────────────────────────── */
+  /* ââ Phase FLECHES âââââââââââââââââââââââââââââââââââââââââ */
   if (state.phase !== 'arrows') return;
 
   /* Cherche le premier impact avec cette valeur non encore saisi
@@ -276,7 +286,7 @@ function onKeyClick(e) {
   );
 
   if (impIdx === -1) {
-    /* Aucun impact correspondant → erreur visuelle et sonore */
+    /* Aucun impact correspondant â erreur visuelle et sonore */
     flashError(
       `Aucun impact dans la zone ${e.currentTarget.textContent} du blason.`
     );
@@ -290,10 +300,10 @@ function onKeyClick(e) {
   fillArrowField(state.nbEntered, val);
   drawTarget(canvas, state.mode, state.impacts);
 
-  /* Verrouille les boutons de mode dès la 1ère flèche saisie */
+  /* Verrouille les boutons de mode dÃ¨s la 1Ã¨re flÃ¨che saisie */
   if (state.nbEntered === 1) enableModeButtons(false);
 
-  /* Toutes les flèches saisies → passer en phase TOTAL (kClavTot) */
+  /* Toutes les flÃ¨ches saisies â passer en phase TOTAL (kClavTot) */
   if (state.nbEntered === state.nbArrows) {
     switchToTotalPhase();
   }
@@ -303,41 +313,41 @@ function onKeyClick(e) {
    Phases de saisie
    ================================================================ */
 
-/** Passe en phase TOTAL (équivalent ClavierOnOff(kClavTot)) */
+/** Passe en phase TOTAL (Ã©quivalent ClavierOnOff(kClavTot)) */
 function switchToTotalPhase() {
   state.phase          = 'total';
   totalInput.disabled  = false;
   totalInput.value     = '';
   totalInput.className = '';
   updateMKey(true);
-  setKeyboardTotalMode();   /* masque tout sauf Eff, élargit Eff */
+  setKeyboardTotalMode();   /* masque tout sauf Eff, Ã©largit Eff */
   totalInput.focus();
-  showPopup('Entrez le total des points de la volée.', 'info');
+  showPopup('Entrez le total des points de la volÃ©e.', 'info');
 }
 
 /**
  * Valide la saisie du total (TOTALChange)
- * Comparaison chaîne pour gérer les saisies partielles
+ * Comparaison chaÃ®ne pour gÃ©rer les saisies partielles
  */
 function validateTotal() {
   const entered = totalInput.value;
   const correct = String(state.totalPts);
 
-  /* Valeur correcte → succès */
+  /* Valeur correcte â succÃ¨s */
   if (entered === correct) {
     totalInput.classList.remove('error');
     totalInput.classList.add('correct');
     hidePopup();
-    /* Petit délai visuel avant de passer à la suite */
+    /* Petit dÃ©lai visuel avant de passer Ã  la suite */
     setTimeout(onVolleyCorrect, 450);
     return;
   }
 
-  /* Longueur atteinte mais valeur erronée → signal d'erreur */
+  /* Longueur atteinte mais valeur erronÃ©e â signal d'erreur */
   if (entered.length >= correct.length) {
     totalInput.classList.remove('correct');
-    flashError('Le total des points de la volée est erroné.');
-    /* Effacement automatique après le flash (500ms) */
+    flashError('Le total des points de la volÃ©e est erronÃ©.');
+    /* Effacement automatique aprÃ¨s le flash (500ms) */
     setTimeout(() => {
       totalInput.value = '';
       totalInput.classList.remove('error');
@@ -346,7 +356,7 @@ function validateTotal() {
   }
 }
 
-/** Volée réussie — équivalent de la branche "text = IntToStr(iTOTAL)" */
+/** VolÃ©e rÃ©ussie â Ã©quivalent de la branche "text = IntToStr(iTOTAL)" */
 function onVolleyCorrect() {
   state.phase = 'done';
   totalInput.disabled = true;
@@ -360,23 +370,23 @@ function onVolleyCorrect() {
     state.chalVolleys += 1;
 
     if (state.chalRound < 10) {
-      /* Délai court pour laisser voir le total vert, puis volée suivante */
+      /* DÃ©lai court pour laisser voir le total vert, puis volÃ©e suivante */
       setTimeout(launchVolley, 400);
     } else {
       setTimeout(endChallenge, 400);
     }
   } else {
-    /* Mode entraînement : génère automatiquement la prochaine volée
-       après un court délai permettant de voir le total valide en vert */
+    /* Mode entraÃ®nement : gÃ©nÃ¨re automatiquement la prochaine volÃ©e
+       aprÃ¨s un court dÃ©lai permettant de voir le total valide en vert */
     setTimeout(launchVolley, 500);
   }
 }
 
 /* ================================================================
-   Lancement d'une volée (btnVoleeClick)
+   Lancement d'une volÃ©e (btnVoleeClick)
    ================================================================ */
 function launchVolley() {
-  /* Génère les impacts */
+  /* GÃ©nÃ¨re les impacts */
   state.impacts   = generateImpacts(state.nbArrows, canvas, state.mode);
   state.nbEntered = 0;
   state.totalPts  = 0;
@@ -388,18 +398,18 @@ function launchVolley() {
   totalInput.disabled  = true;
   totalInput.className = '';
   updateMKey(false);
-  restoreKeyboard();          /* remet le clavier dans son état normal */
+  restoreKeyboard();          /* remet le clavier dans son Ã©tat normal */
   setKeyboardEnabled(true);
-  enableModeButtons(true);   /* actifs tant qu'aucune flèche n'est saisie */
+  enableModeButtons(true);   /* actifs tant qu'aucune flÃ¨che n'est saisie */
 
   /* Redessine le blason avec les impacts */
   drawTarget(canvas, state.mode, state.impacts);
 
-  /* Séquence par flèche : whoosh → impact sonore → dessin */
+  /* SÃ©quence par flÃ¨che : whoosh â impact sonore â dessin */
   const flightMs  = 420;
   const spacingMs = 700;
 
-  /* Boutons de mode inutilisables pendant toute la génération */
+  /* Boutons de mode inutilisables pendant toute la gÃ©nÃ©ration */
   enableModeButtons(false);
 
   state.impacts.forEach((imp, i) => {
@@ -414,7 +424,7 @@ function launchVolley() {
     }, t + flightMs);
   });
 
-  /* Mode JEU : démarrage du chrono */
+  /* Mode JEU : dÃ©marrage du chrono */
   if (state.challenge) {
     state.chalRound++;
     state.chalTimer = 60;    /* kDuJeu = 60 */
@@ -426,10 +436,10 @@ function launchVolley() {
 }
 
 /* ================================================================
-   Démarrage d'un mode (btnSALLE / btnTAE / btnCampagneClick)
+   DÃ©marrage d'un mode (btnSALLE / btnTAE / btnCampagneClick)
    ================================================================ */
 function startMode(mode) {
-  /* Met en évidence le bouton actif */
+  /* Met en Ã©vidence le bouton actif */
   [btnSALLE, btnTAE, btnCAMPAGNE].forEach(b => {
     b.classList.remove('active-salle', 'active-tae', 'active-campagne');
   });
@@ -442,7 +452,7 @@ function startMode(mode) {
 
   if (state.challenge) {
     /* sResultat := 'Gain du jeu sur blason ...' */
-    state.chalLabel = `Gain du jeu sur blason « ${mode} » :`;
+    state.chalLabel = `Gain du jeu sur blason Â« ${mode} Â» :`;
   }
 
   buildArrowFields(state.nbArrows);
@@ -458,7 +468,7 @@ function startMode(mode) {
 /** Bascule Challenge ON/OFF */
 function toggleChallenge() {
   if (state.challenge) {
-    /* ── Arrêt manuel du challenge ─────────────────────────── */
+    /* ââ ArrÃªt manuel du challenge âââââââââââââââââââââââââââ */
     clearInterval(state.timerHandle);
     timerEl.classList.add('hidden');
     state.challenge = false;
@@ -472,21 +482,78 @@ function toggleChallenge() {
 
     if (state.chalRound > 0) showModal(buildChallengeResult());
   } else {
-    /* ── Démarrage du challenge ─────────────────────────────── */
-    state.challenge   = true;
-    state.chalRound   = 0;
-    state.chalTimer   = -1;
-    state.chalVolleys = 0;
-    state.chalScore   = 0;
-    state.chalLabel   = '';
-
-    btnJEU.textContent = 'Challenge ON';
-    btnJEU.classList.add('active');
-    /* Le premier lancement se fait en cliquant un bouton de mode */
+    /* ââ DÃ©marrage du challenge : identification du joueur ââââ */
+    openPlayerModal();
   }
 }
 
-/** timJEUTimer — se déclenche chaque seconde */
+/* ================================================================
+   Identification du joueur (dÃ©but de challenge)
+   ================================================================ */
+
+/** Affiche la modale d'identification du joueur */
+function openPlayerModal() {
+  /* PrÃ©-remplissage avec le dernier joueur ayant jouÃ© sur cet appareil */
+  try {
+    const last = JSON.parse(localStorage.getItem('ecopo-last-player') || 'null');
+    if (last) {
+      playerPrenom.value  = last.prenom  || '';
+      playerNom.value     = last.nom     || '';
+      playerLicence.value = last.licence || '';
+    }
+  } catch (_) { /* stockage indisponible â modale vierge */ }
+
+  playerOverlay.classList.remove('hidden');
+  playerPrenom.focus();
+}
+
+/** Valide l'identification puis lance le challenge */
+function confirmPlayer() {
+  const prenom  = playerPrenom.value.trim();
+  const nom     = playerNom.value.trim();
+  const licence = playerLicence.value.trim();
+
+  /* Les trois champs sont obligatoires */
+  [playerPrenom, playerNom, playerLicence].forEach(el => {
+    el.classList.toggle('invalid', el.value.trim() === '');
+  });
+  if (prenom === '' || nom === '' || licence === '') return;
+
+  state.player = { prenom, nom, licence };
+
+  /* MÃ©morise le joueur pour prÃ©-remplir la prochaine fois */
+  try {
+    localStorage.setItem('ecopo-last-player', JSON.stringify(state.player));
+  } catch (_) { /* tant pis */ }
+
+  playerOverlay.classList.add('hidden');
+  startChallenge();
+}
+
+/** DÃ©marrage effectif du challenge (aprÃ¨s identification du joueur) */
+function startChallenge() {
+  state.challenge   = true;
+  state.chalRound   = 0;
+  state.chalTimer   = -1;
+  state.chalVolleys = 0;
+  state.chalScore   = 0;
+  state.chalLabel   = '';
+
+  btnJEU.textContent = 'Challenge ON';
+  btnJEU.classList.add('active');
+  /* Le premier lancement se fait en cliquant un bouton de mode */
+}
+
+playerCancel.addEventListener('click', () => {
+  playerOverlay.classList.add('hidden');
+});
+playerOK.addEventListener('click', confirmPlayer);
+playerOverlay.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') confirmPlayer();
+  if (e.key === 'Escape') playerOverlay.classList.add('hidden');
+});
+
+/** timJEUTimer â se dÃ©clenche chaque seconde */
 function tickTimer() {
   if (!state.challenge || state.chalTimer <= 0) return;
 
@@ -495,7 +562,7 @@ function tickTimer() {
   timerEl.classList.toggle('warning', state.chalTimer <= 10);
 
   if (state.chalTimer <= 0) {
-    /* Temps écoulé → volée suivante ou fin */
+    /* Temps Ã©coulÃ© â volÃ©e suivante ou fin */
     clearInterval(state.timerHandle);
     if (state.chalRound < 10) {
       launchVolley();
@@ -509,7 +576,7 @@ function updateTimerDisplay() {
   timerEl.textContent = state.chalTimer;
 }
 
-/** Fin des 10 volées du challenge */
+/** Fin des 10 volÃ©es du challenge */
 function endChallenge() {
   clearInterval(state.timerHandle);
   timerEl.classList.add('hidden');
@@ -522,10 +589,20 @@ function endChallenge() {
   setKeyboardEnabled(false);
   enableModeButtons(true);
 
-  showModal(buildChallengeResult());
+  /* Enregistrement du score : uniquement s'il bat le record
+     personnel du joueur pour ce type de volÃ©e (ou 1er record) */
+  const recordInfo = registerChallengeRecord();
+  const result = buildChallengeResult();
+  if (recordInfo) {
+    const modeLabel = state.mode || '';
+    result.body += (recordInfo.isNewRecord
+      ? `\nð Nouveau record personnel Â« ${modeLabel} Â» !`
+      : `\nRecord personnel Â« ${modeLabel} Â» : ${recordInfo.best} points.`);
+  }
+  showModal(result);
 }
 
-/** Construit le message de résultat (sResultat Pascal) */
+/** Construit le message de rÃ©sultat (sResultat Pascal) */
 function buildChallengeResult() {
   const now     = new Date();
   const dateStr = now.toLocaleDateString('fr-FR', {
@@ -537,12 +614,98 @@ function buildChallengeResult() {
   const vStr = state.chalVolleys;
 
   return {
-    title: state.chalLabel || 'Résultat du Challenge :',
+    title: state.chalLabel || 'RÃ©sultat du Challenge :',
     body:  `${state.chalScore} points.\n`
-         + `Pour ${vStr} décompte${vStr > 1 ? 's' : ''} exact${vStr > 1 ? 's' : ''}`
-         + ` sur 10 volées.\n`
-         + `Le ${dateStr} à ${timeStr}.`,
+         + `Pour ${vStr} dÃ©compte${vStr > 1 ? 's' : ''} exact${vStr > 1 ? 's' : ''}`
+         + ` sur 10 volÃ©es.\n`
+         + `Le ${dateStr} Ã  ${timeStr}.`,
   };
+}
+
+/* ================================================================
+   Records des challenges
+   â¢ Stockage local (localStorage) â fonctionne 100 % hors-ligne
+   â¢ Synchronisation optionnelle vers une Google Sheet partagÃ©e via
+     un web app Apps Script (constante RECORDS_WEBHOOK_URL)
+   ================================================================ */
+const RECORDS_KEY = 'ecopo-records';
+
+/* URL du web app Apps Script alimentant la Google Sheet partagÃ©e
+   de classement. Laisser vide pour un fonctionnement 100 % hors-ligne.
+   Exemple : 'https://script.google.com/macros/s/AKfycbâ¦/exec' */
+const RECORDS_WEBHOOK_URL = '';
+
+/** Charge les records locaux :
+    { licence: { prenom, nom, modes: { MODE: { score, volleys, date } } } } */
+function loadRecords() {
+  try {
+    return JSON.parse(localStorage.getItem(RECORDS_KEY) || '{}');
+  } catch (_) {
+    return {};
+  }
+}
+
+function saveRecords(records) {
+  try {
+    localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
+  } catch (_) { /* stockage indisponible â ignorÃ© */ }
+}
+
+/**
+ * Enregistre le score du challenge qui vient de se terminer :
+ * le score ne remplace le record prÃ©cÃ©dent que s'il est MEILLEUR.
+ * Retourne { isNewRecord, best } ou null si non enregistrable.
+ */
+function registerChallengeRecord() {
+  if (!state.player || !state.mode) return null;
+
+  const licence = state.player.licence;
+  const mode    = state.mode;
+  const score   = state.chalScore;
+
+  const records = loadRecords();
+  const entry    = records[licence] ||
+    (records[licence] = { prenom: state.player.prenom, nom: state.player.nom, modes: {} });
+  const prev = entry.modes[mode];
+
+  /* Score infÃ©rieur ou Ã©gal au record prÃ©cÃ©dent â rien Ã  enregistrer */
+  if (prev && prev.score >= score) {
+    return { isNewRecord: false, best: prev.score };
+  }
+
+  const now = new Date();
+  entry.modes[mode] = {
+    score:   score,
+    volleys: state.chalVolleys,
+    date:    now.toISOString(),
+  };
+  saveRecords(records);
+
+  /* Synchronisation optionnelle (Google Sheet partagÃ©e) */
+  sendRecordToSheet({
+    licence:  licence,
+    prenom:   entry.prenom,
+    nom:      entry.nom,
+    mode:     mode,
+    score:    score,
+    volleys:  state.chalVolleys,
+    date:     now.toISOString(),
+  });
+
+  return { isNewRecord: true, best: score };
+}
+
+/** Envoie le record au web app Apps Script (best effort, non bloquant) */
+function sendRecordToSheet(record) {
+  if (!RECORDS_WEBHOOK_URL || !navigator.onLine) return;
+  try {
+    fetch(RECORDS_WEBHOOK_URL, {
+      method: 'POST',
+      /* text/plain : Ã©vite la prÃ©-requÃªte CORS (preflight) */
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(record),
+    }).catch(() => { /* Ã©chec rÃ©seau â le record reste en local */ });
+  } catch (_) { /* tant pis */ }
 }
 
 /* ================================================================
@@ -560,7 +723,7 @@ function hidePopup() {
   popupEl.classList.add('hidden');
 }
 
-/** Erreur de saisie — flash rouge 500ms + son Docteur Maboul */
+/** Erreur de saisie â flash rouge 500ms + son Docteur Maboul */
 function flashError(msg) {
   showPopup(msg, 'error');
   playError();
@@ -575,7 +738,7 @@ function flashError(msg) {
 }
 
 /* ================================================================
-   Modal de résultat (Application.MessageBox)
+   Modal de rÃ©sultat (Application.MessageBox)
    ================================================================ */
 const modalTitle = document.getElementById('modalTitle');
 
@@ -598,7 +761,7 @@ btnClose.addEventListener('click', askClose);
 
 confirmYes.addEventListener('click', () => {
   window.close();
-  /* Fallback si window.close() est bloqué par le navigateur */
+  /* Fallback si window.close() est bloquÃ© par le navigateur */
   document.body.innerHTML =
     '<div style="display:flex;align-items:center;justify-content:center;'
     + 'height:100vh;font-family:Arial,sans-serif;font-size:18px;color:#555;">'
@@ -646,6 +809,10 @@ btnSALLE   .addEventListener('click', () => { preloadSounds(); startMode('SALLE'
 btnTAE     .addEventListener('click', () => { preloadSounds(); startMode('TAE'); });
 btnCAMPAGNE.addEventListener('click', () => { preloadSounds(); startMode('CAMPAGNE'); });
 btnJEU     .addEventListener('click', toggleChallenge);
+btnMANUEL .addEventListener('click', () => {
+  /* Manuel d'utilisation au format PDF (mis en cache hors-ligne) */
+  window.open('EcCoPo_Manuel_Utilisateur.pdf', '_blank');
+});
 
 /* ================================================================
    Initialisation
@@ -655,7 +822,7 @@ btnJEU     .addEventListener('click', toggleChallenge);
   buildKeyboard(10);
   setKeyboardEnabled(false);
 
-  /* Splash screen — affiché 2,5s puis fondu sortie */
+  /* Splash screen â affichÃ© 2,5s puis fondu sortie */
   const splash = document.getElementById('splashOverlay');
   setTimeout(() => {
     splash.style.animation = 'splash-out 0.5s ease-in forwards';
