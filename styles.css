@@ -1,10 +1,10 @@
 /* ================================================================
-   Archers de Laillé — Entraînement au comptage des points
-   styles.css — V4.2 Web Port
+   Archers de LaillÃ© â EntraÃ®nement au comptage des points
+   styles.css â V4.2 Web Port
    (c) 2016/2020 Jean-Michel Grelaud  |  portage web 2026
    ================================================================ */
 
-/* ── Variables ───────────────────────────────────────────────── */
+/* ââ Variables âââââââââââââââââââââââââââââââââââââââââââââââââ */
 :root {
   --bg-deep:     #0a110c;
   --bg-panel:    #111a12;
@@ -20,14 +20,14 @@
   --border:      #243226;
   --key-bg:      #1e2b1e;
   --key-hover:   #2e3e2e;
-  /* Polices système — pas de dépendance réseau
-     --font-ui  : condensée, lisible, style "interface sportive"
+  /* Polices systÃ¨me â pas de dÃ©pendance rÃ©seau
+     --font-ui  : condensÃ©e, lisible, style "interface sportive"
      --font-body: propre et neutre pour le corps               */
   --font-ui:   "Arial Narrow", "Segoe UI", Tahoma, Arial, sans-serif;
   --font-body: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
 }
 
-/* ── Reset ───────────────────────────────────────────────────── */
+/* ââ Reset âââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -38,7 +38,7 @@ html, body {
   font-family: var(--font-body);
 }
 
-/* ── Header ──────────────────────────────────────────────────── */
+/* ââ Header ââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .app-header {
   display: flex;
   align-items: center;
@@ -73,7 +73,7 @@ html, body {
   letter-spacing: 0.06em;
 }
 
-/* ── Mode bar ────────────────────────────────────────────────── */
+/* ââ Mode bar ââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .mode-bar {
   display: flex;
   align-items: center;
@@ -125,7 +125,7 @@ html, body {
   border-radius: 3px;
   cursor: pointer;
   transition: background 0.14s, color 0.14s, border-color 0.14s;
-  /* (A) Centré horizontalement dans la mode-bar */
+  /* (A) CentrÃ© horizontalement dans la mode-bar */
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -138,7 +138,25 @@ html, body {
 }
 .btn-challenge.active:hover { background: #d94048; }
 
-/* ── Arena ───────────────────────────────────────────────────── */
+/* ââ Bouton Manuel (PDF) â calÃ© Ã  droite de la mode-bar âââââââ */
+.btn-manuel {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  width: 110px;
+  padding: 6px 0;
+  background: transparent;
+  color: var(--accent-blue);
+  border: 2px solid var(--accent-blue);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s, border-color 0.14s;
+}
+.btn-manuel:hover { background: rgba(0,180,228,0.12); }
+
+/* ââ Arena âââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .arena {
   display: flex;
   height: calc(100vh - 96px);
@@ -146,7 +164,7 @@ html, body {
   position: relative;   /* contexte pour le positionnement absolu du panneau */
 }
 
-/* ── Target area ─────────────────────────────────────────────── */
+/* ââ Target area âââââââââââââââââââââââââââââââââââââââââââââââ */
 .target-wrapper {
   position: relative;
   flex: 1;
@@ -176,7 +194,7 @@ html, body {
   filter: drop-shadow(0 4px 24px rgba(0,0,0,0.8));
 }
 
-/* ── Timer overlay ───────────────────────────────────────────── */
+/* ââ Timer overlay âââââââââââââââââââââââââââââââââââââââââââââ */
 .timer-overlay {
   position: absolute;
   z-index: 10;
@@ -199,7 +217,7 @@ html, body {
   to   { opacity: 0.35; }
 }
 
-/* ── Popup ───────────────────────────────────────────────────── */
+/* ââ Popup âââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .popup {
   display: block;
   margin: 6px 6px 0;
@@ -217,8 +235,8 @@ html, body {
 .popup.error { background: rgba(246,80,88,0.92); color: #fff; }
 .popup.info  { background: rgba(0,180,228,0.88); color: #fff; }
 
-/* ── Flash erreur : paille → rouge → paille, 500 ms ─────────── */
-/* ── Flash overlay (au-dessus du canvas) ─────────────────────── */
+/* ââ Flash erreur : paille â rouge â paille, 500 ms âââââââââââ */
+/* ââ Flash overlay (au-dessus du canvas) âââââââââââââââââââââââ */
 .flash-overlay {
   position: absolute;
   inset: 0;
@@ -236,7 +254,7 @@ html, body {
   animation: flash-err 0.5s ease-out forwards;
 }
 
-/* ── Side panel — positionné dynamiquement par JS ────────────── */
+/* ââ Side panel â positionnÃ© dynamiquement par JS ââââââââââââââ */
 .side-panel {
   position: absolute;
   width: 155px;
@@ -248,7 +266,7 @@ html, body {
   z-index: 6;   /* au-dessus du canvas (z=2) et du flashOverlay (z=3) */
 }
 
-/* ── Section label ───────────────────────────────────────────── */
+/* ââ Section label âââââââââââââââââââââââââââââââââââââââââââââ */
 .section-label {
   display: block;
   font-family: var(--font-ui);
@@ -260,7 +278,7 @@ html, body {
   padding: 8px 12px 3px;
 }
 
-/* ── Arrow fields ────────────────────────────────────────────── */
+/* ââ Arrow fields ââââââââââââââââââââââââââââââââââââââââââââââ */
 .arrows-section {
   flex-shrink: 0;
   border-bottom: 2px solid #999;
@@ -308,7 +326,7 @@ html, body {
   color: #7a5800;
 }
 
-/* ── Total ───────────────────────────────────────────────────── */
+/* ââ Total âââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 .total-section {
   flex-shrink: 0;
   border-bottom: 2px solid #999;
@@ -344,7 +362,7 @@ html, body {
   color: #aa1010;
 }
 
-/* ── Virtual keyboard ────────────────────────────────────────── */
+/* ââ Virtual keyboard ââââââââââââââââââââââââââââââââââââââââââ */
 .keyboard-section {
   padding: 6px;
   flex-shrink: 0;
@@ -411,7 +429,7 @@ html, body {
   color: #fff;
 }
 
-/* ── Splash screen ───────────────────────────────────────────── */
+/* ââ Splash screen âââââââââââââââââââââââââââââââââââââââââââââ */
 .splash-modal {
   display: flex;
   flex-direction: column;
@@ -452,7 +470,7 @@ html, body {
   margin: 0;
 }
 
-/* ── Result modal ────────────────────────────────────────────── */
+/* ââ Result modal ââââââââââââââââââââââââââââââââââââââââââââââ */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -492,7 +510,7 @@ html, body {
   font-weight: 500;
   line-height: 1.65;
   color: var(--text);
-  margin: 0 0 24px 0;  /* la marge basse crée l'espace avant le bouton */
+  margin: 0 0 24px 0;  /* la marge basse crÃ©e l'espace avant le bouton */
   white-space: pre-wrap;
   text-align: left;
   padding-left: 24px;  /* indentation des informations */
@@ -579,5 +597,58 @@ html, body {
   color: var(--error);
 }
 
-/* ── Utilities ───────────────────────────────────────────────── */
+/* ââ Modale identification joueur (Challenge) ââââââââââââââââââ */
+.modal-player { min-width: 340px; }
+.player-title {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 4px 0;
+}
+.player-sub {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0 0 16px 0;
+}
+.player-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.player-form label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.player-form input {
+  height: 38px;
+  padding: 0 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.player-form input:focus { border-color: var(--accent); }
+.player-form input.invalid { border-color: var(--error); }
+#playerOK { background: var(--accent); color: #111; }
+#playerOK:hover { filter: brightness(1.1); }
+#playerCancel { background: var(--key-bg); color: var(--text); border: 1px solid var(--border); }
+#playerCancel:hover { background: var(--key-hover); }
+
+/* ââ Utilities âââââââââââââââââââââââââââââââââââââââââââââââââ */
 .hidden { display: none !important; }
