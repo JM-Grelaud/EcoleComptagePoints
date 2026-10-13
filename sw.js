@@ -1,7 +1,7 @@
 /* ================================================================
-   sw.js â Service Worker
-   Archers de LaillÃ© | EntraÃ®nement au comptage des points | V4.3
-   StratÃ©gie : Cache First â l'appli fonctionne 100 % hors-ligne
+   sw.js — Service Worker
+   Archers de Laillé | Entraînement au comptage des points | V4.3
+   Stratégie : Cache First — l'appli fonctionne 100 % hors-ligne
    ================================================================ */
 
 'use strict';
@@ -22,16 +22,16 @@ const ASSETS = [
   './EcCoPo_Manuel_Utilisateur.pdf',
 ];
 
-/* ââ Installation : mise en cache de tous les assets âââââââââââ */
+/* ── Installation : mise en cache de tous les assets ─────────── */
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())   /* active immÃ©diatement */
+      .then(() => self.skipWaiting())   /* active immédiatement */
   );
 });
 
-/* ââ Activation : suppression des anciens caches âââââââââââââââ */
+/* ── Activation : suppression des anciens caches ─────────────── */
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -40,20 +40,20 @@ self.addEventListener('activate', (event) => {
           .filter((key) => key !== CACHE_NAME)
           .map((key) => caches.delete(key))
       )
-    ).then(() => self.clients.claim())   /* prend le contrÃ´le immÃ©diatement */
+    ).then(() => self.clients.claim())   /* prend le contrôle immédiatement */
   );
 });
 
-/* ââ Fetch : Cache First ââââââââââââââââââââââââââââââââââââââââ */
+/* ── Fetch : Cache First ──────────────────────────────────────── */
 self.addEventListener('fetch', (event) => {
-  /* On ne gÃ¨re que les requÃªtes GET */
+  /* On ne gère que les requêtes GET */
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      /* Ressource en cache â retour immÃ©diat (offline OK) */
+      /* Ressource en cache → retour immédiat (offline OK) */
       if (cached) return cached;
-      /* Sinon tentative rÃ©seau (premiÃ¨re installation, MÃ J) */
+      /* Sinon tentative réseau (première installation, MàJ) */
       return fetch(event.request).then((response) => {
         /* Mise en cache de la nouvelle ressource */
         if (response && response.status === 200) {
