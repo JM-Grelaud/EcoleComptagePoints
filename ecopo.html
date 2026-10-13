@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>École de Comptage des Points</title>
+  <title>Ãcole de Comptage des Points</title>
 
-  <!-- ── PWA ──────────────────────────────────────────────── -->
+  <!-- ââ PWA ââââââââââââââââââââââââââââââââââââââââââââââââ -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0a110c">
   <meta name="mobile-web-app-capable" content="yes">
@@ -14,34 +14,35 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ComptagePoints">
   <link rel="apple-touch-icon" href="icon-180.png">
-  <!-- Icône générique -->
+  <!-- IcÃ´ne gÃ©nÃ©rique -->
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ── Header ────────────────────────────────── -->
+  <!-- ââ Header ââââââââââââââââââââââââââââââââââ -->
   <header class="app-header">
     <div class="header-title">
-      <span class="app-name">École de Comptage des Points</span>
+      <span class="app-name">Ãcole de Comptage des Points</span>
     </div>
     <div class="header-right">
-      <span class="version-tag">V4.2 | © 2016-2026 | Jean-Michel Grelaud</span>
-      <button id="btnClose" class="btn-close" title="Fermer l'application">✕</button>
+      <span class="version-tag">V4.3 | Â© 2016-2026 | Jean-Michel Grelaud</span>
+      <button id="btnClose" class="btn-close" title="Fermer l'application">â</button>
     </div>
   </header>
 
-  <!-- ── Mode bar ──────────────────────────────── -->
+  <!-- ââ Mode bar ââââââââââââââââââââââââââââââââ -->
   <div class="mode-bar">
-    <button id="btnSALLE"    class="btn-mode">Volée SALLE</button>
-    <button id="btnTAE"      class="btn-mode">Volée T.A.E.</button>
-    <button id="btnCAMPAGNE" class="btn-mode">Volée CAMPAGNE</button>
+    <button id="btnSALLE"    class="btn-mode">VolÃ©e SALLE</button>
+    <button id="btnTAE"      class="btn-mode">VolÃ©e T.A.E.</button>
+    <button id="btnCAMPAGNE" class="btn-mode">VolÃ©e CAMPAGNE</button>
     <div class="spacer"></div>
     <button id="btnJEU" class="btn-challenge">Challenge OFF</button>
+    <button id="btnMANUEL" class="btn-manuel" title="Manuel d'utilisation (PDF)">Manuel</button>
   </div>
 
-  <!-- ── Arena ─────────────────────────────────── -->
+  <!-- ââ Arena âââââââââââââââââââââââââââââââââââ -->
   <main class="arena">
 
     <div class="target-wrapper">
@@ -53,14 +54,14 @@
     <aside class="side-panel">
 
       <div class="arrows-section">
-        <div class="section-label">Points / Flèche</div>
+        <div class="section-label">Points / FlÃ¨che</div>
         <div id="arrowPoints" class="arrow-list"></div>
       </div>
 
       <div class="total-section">
         <label class="section-label" for="total">TOTAL</label>
         <input type="text" id="total" inputmode="numeric"
-               placeholder="—" disabled autocomplete="off">
+               placeholder="â" disabled autocomplete="off">
       </div>
 
       <div class="keyboard-section">
@@ -71,12 +72,12 @@
     </aside>
   </main>
 
-  <!-- ── Splash screen ─────────────────────────── -->
+  <!-- ââ Splash screen âââââââââââââââââââââââââââ -->
   <div id="splashOverlay" class="modal-overlay">
     <div class="modal splash-modal">
       <img src="icon-192.png" alt="EcCoPo" width="150" height="150" class="splash-icon">
-      <p class="splash-title">École de Comptage des Points</p>
-      <p class="splash-copy">V4.2 | © 2016-2026 | Jean-Michel Grelaud</p>
+      <p class="splash-title">Ãcole de Comptage des Points</p>
+      <p class="splash-copy">V4.3 | Â© 2016-2026 | Jean-Michel Grelaud</p>
     </div>
   </div>
   <div id="modalOverlay" class="modal-overlay hidden">
@@ -88,10 +89,31 @@
     </div>
   </div>
 
-  <!-- ── Modale confirmation fermeture ─────────── -->
+  <!-- ââ Modale identification joueur (Challenge) ââ -->
+  <div id="playerOverlay" class="modal-overlay hidden">
+    <div class="modal modal-player">
+      <div class="modal-icon">ð¹</div>
+      <p class="player-title">Nouveau Challenge !</p>
+      <p class="player-sub">Avant de commencer, identifie-toi :</p>
+      <div class="player-form">
+        <label for="playerPrenom">PrÃ©nom</label>
+        <input type="text" id="playerPrenom" autocomplete="off" autocapitalize="words">
+        <label for="playerNom">Nom</label>
+        <input type="text" id="playerNom" autocomplete="off" autocapitalize="words">
+        <label for="playerLicence">NÂ° de licence</label>
+        <input type="text" id="playerLicence" inputmode="numeric" autocomplete="off">
+      </div>
+      <div class="modal-buttons">
+        <button id="playerOK">C'est parti !</button>
+        <button id="playerCancel">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ââ Modale confirmation fermeture âââââââââââ -->
   <div id="confirmOverlay" class="modal-overlay hidden">
     <div class="modal modal-confirm">
-      <div class="modal-icon">❓</div>
+      <div class="modal-icon">â</div>
       <p id="confirmMsg">Confirmez-vous la fermeture de l'application ?</p>
       <div class="modal-buttons">
         <button id="confirmYes">Oui</button>
@@ -104,13 +126,13 @@
   <script src="sounds.js"></script>
   <script src="app.js"></script>
 
-  <!-- ── Enregistrement du Service Worker ──────── -->
+  <!-- ââ Enregistrement du Service Worker ââââââââ -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('[SW] Enregistré :', reg.scope))
-          .catch(err => console.warn('[SW] Échec :', err));
+          .then(reg => console.log('[SW] EnregistrÃ© :', reg.scope))
+          .catch(err => console.warn('[SW] Ãchec :', err));
       });
     }
   </script>
