@@ -430,6 +430,8 @@ function launchVolley() {
   /* Mode JEU : démarrage du chrono */
   if (state.challenge) {
     state.chalRound++;
+    roundLabel.textContent = `Volée N°${state.chalRound} sur 10`;
+    roundLabel.classList.remove('hidden');
     state.chalTimer = 60;    /* kDuJeu = 60 */
     updateTimerDisplay();
     timerEl.classList.remove('hidden', 'warning');
@@ -474,6 +476,7 @@ function toggleChallenge() {
     /* ── Arrêt manuel du challenge ─────────────────────────── */
     clearInterval(state.timerHandle);
     timerEl.classList.add('hidden');
+    roundLabel.classList.add('hidden');
     state.challenge = false;
     state.phase     = 'idle';
 
@@ -548,6 +551,7 @@ function confirmPlayer() {
 function startChallenge() {
   state.challenge   = true;
   state.chalRound   = 0;
+  roundLabel.classList.add('hidden');
   state.chalTimer   = -1;
   state.chalVolleys = 0;
   state.chalScore   = 0;
@@ -594,6 +598,7 @@ function updateTimerDisplay() {
 function endChallenge() {
   clearInterval(state.timerHandle);
   timerEl.classList.add('hidden');
+  roundLabel.classList.add('hidden');
   state.challenge = false;
 
   btnJEU.textContent = 'Challenge OFF';
@@ -847,6 +852,7 @@ function messageJournal_(record, envoyeSeulement) {
    Popup (ShowPopup)
    ================================================================ */
 let _popupTimeout = null;
+
 function showPopup(msg, type = 'error') {
   popupEl.textContent = msg;
   popupEl.className   = `popup ${type}`;
@@ -870,7 +876,6 @@ function positionnerPopup_() {
   popupEl.style.left   = (rect.left + rect.width / 2) + 'px';
   popupEl.style.bottom = (window.innerHeight - rect.top - centre * scale) + 'px';
 }
-
 function hidePopup() {
   popupEl.classList.add('hidden');
 }
@@ -879,7 +884,7 @@ function hidePopup() {
 function flashError(msg) {
   showPopup(msg, 'error');
   playError();
-  const overlay = document.getElementById('flashOverlay');      
+  const overlay = document.getElementById('flashOverlay');
   overlay.classList.remove('flash-error');
   void overlay.offsetWidth;
   overlay.classList.add('flash-error');
