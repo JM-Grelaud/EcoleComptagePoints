@@ -711,7 +711,7 @@ const RECORDS_KEY = 'ecopo-records';
 /* URL du web app Apps Script alimentant la Google Sheet partagée
    de classement. Laisser vide pour un fonctionnement 100 % hors-ligne.
    Exemple : 'https://script.google.com/macros/s/AKfycb…/exec' */
-const RECORDS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxpJJirsCegM8V56Hk90A15_SKYm_FELMcIZxecX748DKBZGJVRE-Yf2IRfkLPe7dy2JA/exec';
+const RECORDS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwroHUoAKvizU-pkgsExRtQoPVHyO6xuBbVJmK-BFwxK62gyJpUPdo1cYuNHG87rDX7-Q/exec';
 
 /** Charge les records locaux :
     { licence: { prenom, nom, modes: { MODE: { score, volleys, date } } } } */
