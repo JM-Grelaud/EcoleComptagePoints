@@ -846,13 +846,24 @@ function messageJournal_(record, envoyeSeulement) {
    Popup (ShowPopup)
    ================================================================ */
 let _popupTimeout = null;
-
 function showPopup(msg, type = 'error') {
   popupEl.textContent = msg;
   popupEl.className   = `popup ${type}`;
+  positionnerPopup_();
   clearTimeout(_popupTimeout);
   _popupTimeout = setTimeout(hidePopup, 8000);   /* 8 s */
 }
+
+/** Colle le bas du popup sur le bord inférieur du blason,
+ *  et le centre horizontalement sur celui-ci */
+function positionnerPopup_() {
+  const canvas = document.getElementById('targetCanvas');
+  if (!canvas) return;
+  const r = canvas.getBoundingClientRect();
+  popupEl.style.left   = (r.left + r.width / 2) + 'px';
+  popupEl.style.bottom = (window.innerHeight - r.bottom) + 'px';
+}
+
 function hidePopup() {
   popupEl.classList.add('hidden');
 }
@@ -861,7 +872,7 @@ function hidePopup() {
 function flashError(msg) {
   showPopup(msg, 'error');
   playError();
-  const overlay = document.getElementById('flashOverlay');
+  const overlay = document.getElementById('flashOverlay');      
   overlay.classList.remove('flash-error');
   void overlay.offsetWidth;
   overlay.classList.add('flash-error');
