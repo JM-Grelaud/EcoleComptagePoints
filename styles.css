@@ -234,6 +234,7 @@ html, body {
 }
 .popup.error { background: rgba(246,80,88,0.92); color: #fff; }
 .popup.info  { background: rgba(0,180,228,0.88); color: #fff; }
+.popup.success { background: rgba(46,164,58,0.92); color: #fff; }
 
 /* ── Flash erreur : paille → rouge → paille, 500 ms ─────────── */
 /* ── Flash overlay (au-dessus du canvas) ─────────────────────── */
