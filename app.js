@@ -53,6 +53,7 @@ const btnTAE       = document.getElementById('btnTAE');
 const btnCAMPAGNE  = document.getElementById('btnCAMPAGNE');
 const btnJEU       = document.getElementById('btnJEU');
 const btnMANUEL    = document.getElementById('btnMANUEL');
+const btnCLASSEMENTS = document.getElementById('btnCLASSEMENTS');
 const btnClose     = document.getElementById('btnClose');
 const modalOverlay = document.getElementById('modalOverlay');
 const modalMsg     = document.getElementById('modalMsg');
@@ -883,6 +884,61 @@ function messageJournal_(record, envoyeSeulement) {
 }
 
 /* ================================================================
+   Classements du club (onglets QUERY de la Google Sheet)
+   ================================================================ */
+
+/** Affiche les classements SALLE / TAE / CAMPAGNE du club.
+ *  Interdit pendant un challenge en cours. */
+function afficherClassements() {
+  if (state.challenge) {
+    showPopup('Classements indisponibles pendant un challenge.', 'error');
+    return;
+  }
+  if (!RECORDS_WEBHOOK_URL || !navigator.onLine) {
+    showPopup('Classements indisponibles (hors-ligne).', 'error');
+    return;
+  }
+  showPopup('Chargement des classements…', 'info');
+  fetch(RECORDS_WEBHOOK_URL + '?action=classements')
+    .then((res) => res.json())
+    .then((data) => {
+      hidePopup();
+      if (data && data.status === 'ok') {
+        showModal(construireModalClassements_(data.classements || {}));
+      } else {
+        showPopup('Classements indisponibles.', 'error');
+      }
+    })
+    .catch(() => {
+      hidePopup();
+      showPopup('Classements indisponibles (réseau).', 'error');
+    });
+}
+
+/** Construit la modale : une section par type de volée. Les lignes
+ *  suivent l'ordre des colonnes de tes QUERY
+ *  (Prénom, Nom, Score, Volées exactes, Date). */
+function construireModalClassements_(classements) {
+  let body = '';
+  ['SALLE', 'TAE', 'CAMPAGNE'].forEach((mode) => {
+    body += `── ${mode} ──\n`;
+    const rows = classements[mode];
+    if (!rows || !rows.length) {
+      body += 'Aucun record pour l\'instant.\n';
+    } else {
+      rows.forEach((r, i) => {
+        const ligne = (r.length >= 5)
+          ? `${r[0]} ${r[1]} — ${r[2]} pts, ${r[3]} volées (${r[4]})`
+          : r.join(' — ');
+        body += `${i + 1}. ${ligne}\n`;
+      });
+    }
+    body += '\n';
+  });
+  return { title: '🏆 Classements du club', body: body.trim() };
+}
+
+/* ================================================================
    Popup (ShowPopup)
    ================================================================ */
 let _popupTimeout = null;
@@ -1000,6 +1056,7 @@ btnSALLE   .addEventListener('click', () => { preloadSounds(); startMode('SALLE'
 btnTAE     .addEventListener('click', () => { preloadSounds(); startMode('TAE'); });
 btnCAMPAGNE.addEventListener('click', () => { preloadSounds(); startMode('CAMPAGNE'); });
 btnJEU     .addEventListener('click', toggleChallenge);
+btnCLASSEMENTS.addEventListener('click', afficherClassements);
 btnMANUEL .addEventListener('click', () => {
   /* Manuel d'utilisation au format PDF (mis en cache hors-ligne) */
   window.open('EcCoPo_Manuel_Utilisateur.pdf', '_blank');
