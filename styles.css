@@ -219,18 +219,23 @@ html, body {
 
 /* ── Popup ───────────────────────────────────────────────────── */
 .popup {
-  display: block;
-  margin: 6px 6px 0;
-  padding: 6px 10px;
-  border-radius: 4px;
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 92%;
+  z-index: 300;   /* au-dessus des modales (z=200) */
+  padding: 8px 12px;
+  border-radius: 6px;
   font-family: var(--font-ui);
   font-weight: 600;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.03em;
   text-align: center;
   white-space: normal;
   line-height: 1.35;
   pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
 }
 .popup.error { background: rgba(246,80,88,0.92); color: #fff; }
 .popup.info  { background: rgba(0,180,228,0.88); color: #fff; }
