@@ -156,6 +156,23 @@ html, body {
 }
 .btn-manuel:hover { background: rgba(0,180,228,0.12); }
 
+/* ── Bouton Classements (GS) — à côté du bouton Challenge ────── */
+.btn-classements {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  background: transparent;
+  color: #d9a521;
+  border: 2px solid #d9a521;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s, border-color 0.14s;
+}
+.btn-classements:hover { background: rgba(217,165,33,0.12); }
+
 /* ── Arena ───────────────────────────────────────────────────── */
 .arena {
   display: flex;
