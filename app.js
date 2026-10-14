@@ -44,6 +44,7 @@ const state = {
 const canvas       = document.getElementById('targetCanvas');
 const timerEl      = document.getElementById('timerDisplay');
 const popupEl      = document.getElementById('popup');
+const roundLabel   = document.getElementById('roundLabel');
 const totalInput   = document.getElementById('total');
 const arrowList    = document.getElementById('arrowPoints');
 const keyGrid      = document.getElementById('keyGrid');
