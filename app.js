@@ -505,20 +505,32 @@ function toggleChallenge() {
 
 /** Affiche la modale d'identification du joueur */
 function openPlayerModal() {
-  /* Pré-remplissage avec le dernier joueur ayant joué sur cet appareil */
+  /* Dernier joueur ayant joué sur cet appareil */
+  let last = null;
   try {
-    const last = JSON.parse(localStorage.getItem('ecopo-last-player') || 'null');
-    if (last) {
-      playerPrenom.value  = last.prenom  || '';
-      playerNom.value     = last.nom     || '';
-      playerLicence.value = last.licence || '';
-      /* Sélectionne l'archer dans la liste déroulante s'il y figure */
-      if (playerArcher && last.licence &&
-          [...playerArcher.options].some(o => o.value === last.licence)) {
-        playerArcher.value = last.licence;
-      }
-    }
+    last = JSON.parse(localStorage.getItem('ecopo-last-player') || 'null');
   } catch (_) { /* stockage indisponible → modale vierge */ }
+
+  /* Liste d'archers présente ? → les 3 champs découlent de la
+     sélection et ne sont plus saisissables à la main. */
+  const avecListe = playerArcher && playerArcherWrap &&
+                    !playerArcherWrap.classList.contains('hidden') &&
+                    playerArcher.options.length > 1;
+  basculerSaisieManuelle_(!avecListe);
+
+  if (avecListe) {
+    /* On repart de champs vides, sauf si le dernier joueur figure
+       dans la liste (il est alors présélectionné). */
+    playerPrenom.value = playerNom.value = playerLicence.value = '';
+    if (last && [...playerArcher.options].some(o => o.value === last.licence)) {
+      playerArcher.value = last.licence;
+      appliquerArcher_(last.licence);
+    }
+  } else if (last) {
+    playerPrenom.value  = last.prenom  || '';
+    playerNom.value     = last.nom     || '';
+    playerLicence.value = last.licence || '';
+  }
 
   playerOverlay.classList.remove('hidden');
   playerPrenom.focus();
@@ -676,12 +688,38 @@ async function refreshArchers() {
 }
 
 /** Construit (ou met à jour) le menu déroulant des archers */
+/** Applique les NOM/PRÉNOM/licence officiels de l'archer sélectionné */
+function appliquerArcher_(licence) {
+  const a = (loadArchers() || []).find(x => x.licence === licence);
+  if (a) {
+    playerPrenom.value  = a.prenom;
+    playerNom.value     = a.nom;
+    playerLicence.value = a.licence;
+    [playerPrenom, playerNom, playerLicence]
+      .forEach(el => el.classList.remove('invalid'));
+  }
+}
+
+/** Rend les 3 champs Prénom/Nom/Licence saisissables (mode dégradé,
+ *  sans liste d'archers) ou en lecture seule (ils découlent alors
+ *  uniquement de la liste déroulante). */
+function basculerSaisieManuelle_(autorisée) {
+  [playerPrenom, playerNom, playerLicence].forEach(el => {
+    el.readOnly = !autorisée;
+    el.classList.toggle('readonly', !autorisée);
+    if (!autorisée) el.classList.remove('invalid');
+  });
+}
+
 function fillArcherSelect(archers) {
   if (!playerArcher || !playerArcherWrap) return;
 
   /* Pas de liste disponible → saisie manuelle uniquement */
   playerArcherWrap.classList.toggle('hidden', !(archers && archers.length));
-  if (!archers || !archers.length) return;
+  if (!archers || !archers.length) {
+    basculerSaisieManuelle_(true);   /* pas de liste → saisie manuelle */
+    return;
+  }
 
   const current = playerArcher.value;
   playerArcher.innerHTML = '';
@@ -698,18 +736,14 @@ function fillArcherSelect(archers) {
   if (current && [...playerArcher.options].some(o => o.value === current)) {
     playerArcher.value = current;
   }
+  /* Liste présente → champs dérivés en lecture seule */
+  basculerSaisieManuelle_(false);
+  if (playerArcher.value) appliquerArcher_(playerArcher.value);
 }
 
 /* Sélection d'un archer → pré-remplissage des trois champs */
 playerArcher.addEventListener('change', () => {
-  const licence = playerArcher.value;
-  if (!licence) return;
-  const a = (loadArchers() || []).find(x => x.licence === licence);
-  if (a) {
-    playerPrenom.value   = a.prenom;
-    playerNom.value      = a.nom;
-    playerLicence.value  = a.licence;
-  }
+  if (playerArcher.value) appliquerArcher_(playerArcher.value);
 });
 
 /* ================================================================
