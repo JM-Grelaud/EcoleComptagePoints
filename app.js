@@ -854,14 +854,20 @@ function showPopup(msg, type = 'error') {
   _popupTimeout = setTimeout(hidePopup, 8000);   /* 8 s */
 }
 
-/** Colle le bas du popup sur le bord inférieur du blason,
- *  et le centre horizontalement sur celui-ci */
+/** Centre le popup : horizontalement sur le canvas du blason,
+ *  verticalement dans la bande blanche comprise entre le bas de la
+ *  bande colorée (zone 3) et le bas du carré blanc du blason. */
 function positionnerPopup_() {
   const canvas = document.getElementById('targetCanvas');
-  if (!canvas) return;
-  const r = canvas.getBoundingClientRect();
-  popupEl.style.left   = (r.left + r.width / 2) + 'px';
-  popupEl.style.bottom = (window.innerHeight - r.bottom) + 'px';
+  if (!canvas || typeof getLayout !== 'function') return;
+  const rect  = canvas.getBoundingClientRect();
+  const { H, sqSize, cy, R } = getLayout(canvas);
+  const scale = rect.height / H;               /* 827 px → taille écran */
+  const basCible  = cy + 0.8 * R;              /* bas bande colorée (zone 3) */
+  const basBlason = (H + sqSize) / 2;          /* bas carré blanc */
+  const centre    = (basCible + basBlason) / 2;
+  popupEl.style.left   = (rect.left + rect.width / 2) + 'px';
+  popupEl.style.bottom = (window.innerHeight - rect.top - centre * scale) + 'px';
 }
 
 function hidePopup() {
