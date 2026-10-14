@@ -27,7 +27,7 @@
       <span class="app-name">École de Comptage des Points</span>
     </div>
     <div class="header-right">
-      <span class="version-tag">V4.3 | © 2016-2026 | Jean-Michel Grelaud</span>
+      <span class="version-tag">V4.3.1 | © 2016-2026 | Jean-Michel Grelaud</span>
       <button id="btnClose" class="btn-close" title="Fermer l'application">✕</button>
     </div>
   </header>
@@ -96,6 +96,12 @@
       <p class="player-title">Nouveau Challenge !</p>
       <p class="player-sub">Avant de commencer, identifie-toi :</p>
       <div class="player-form">
+        <div id="playerArcherWrap" class="hidden">
+          <label for="playerArcher">Archers du club</label>
+          <select id="playerArcher">
+            <option value="">— Sélectionner un archer —</option>
+          </select>
+        </div>
         <label for="playerPrenom">Prénom</label>
         <input type="text" id="playerPrenom" autocomplete="off" autocapitalize="words">
         <label for="playerNom">Nom</label>
