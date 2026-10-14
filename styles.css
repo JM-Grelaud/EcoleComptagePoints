@@ -233,7 +233,8 @@ html, body {
   line-height: 1.35;
   pointer-events: none;
   box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-  transform: translate(-50%, 50%);}
+  transform: translate(-50%, 50%);
+}
 .popup.error { background: rgba(246,80,88,0.92); color: #fff; }
 .popup.info  { background: rgba(0,180,228,0.88); color: #fff; }
 .popup.success { background: rgba(46,164,58,0.92); color: #fff; }
@@ -377,13 +378,18 @@ html, body {
   align-content: start;
 }
 .round-label {
-  margin-top: 6px;
+  width: fit-content;
+  margin: 6px auto 0;
+  padding: 3px 10px;
+  border-radius: 2px;
   font-family: var(--font-ui);
   font-weight: 600;
   font-size: 12px;
   letter-spacing: 0.03em;
   text-align: center;
-  color: var(--text-light);
+  color: #000000;
+  background-color: #FFF8A6;   /* jaune Post-It */
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.25);
 }
 .key {
   font-family: var(--font-ui);
