@@ -482,7 +482,13 @@ function toggleChallenge() {
     enableModeButtons(true);
     setKeyboardEnabled(false);
 
-    if (state.chalRound > 0) showModal(buildChallengeResult());
+    if (state.chalRound > 0) {
+      /* Challenge arrêté avant la 10e volée : le score partiel est
+         tracé dans le Journal (le nombre de volées exactes y figure),
+         mais il ne compte pas pour le record personnel. */
+      registerChallengeRecord(true);
+      showModal(buildChallengeResult());
+    }
   } else {
     /* ── Démarrage du challenge : identification du joueur ──── */
     openPlayerModal();
@@ -732,14 +738,33 @@ function saveRecords(records) {
 /**
  * Enregistre le score du challenge qui vient de se terminer :
  * le score ne remplace le record précédent que s'il est MEILLEUR.
+ * Si `partial` est vrai (challenge arrêté avant la 10e volée), le score
+ * est envoyé au Journal pour trace, mais le record personnel local
+ * n'est ni comparé ni modifié — seuls les challenges complets de
+ * 10 volées comptent pour le record.
  * Retourne { isNewRecord, best } ou null si non enregistrable.
  */
-function registerChallengeRecord() {
+function registerChallengeRecord(partial) {
   if (!state.player || !state.mode) return null;
 
   const licence = state.player.licence;
   const mode    = state.mode;
   const score   = state.chalScore;
+  const now     = new Date();
+
+  if (partial) {
+    /* Trace dans le Journal, sans impact sur le record local */
+    sendRecordToSheet({
+      licence:  licence,
+      prenom:   state.player.prenom,
+      nom:      state.player.nom,
+      mode:     mode,
+      score:    score,
+      volleys:  state.chalVolleys,
+      date:     now.toISOString(),
+    });
+    return null;
+  }
 
   const records = loadRecords();
   const entry    = records[licence] ||
@@ -751,7 +776,6 @@ function registerChallengeRecord() {
     return { isNewRecord: false, best: prev.score };
   }
 
-  const now = new Date();
   entry.modes[mode] = {
     score:   score,
     volleys: state.chalVolleys,
