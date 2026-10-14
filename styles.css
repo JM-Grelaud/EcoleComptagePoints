@@ -645,6 +645,19 @@ html, body {
 }
 .player-form input:focus { border-color: var(--accent); }
 .player-form input.invalid { border-color: var(--error); }
+.player-form select {
+  height: 38px;
+  padding: 0 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.player-form select:focus { border-color: var(--accent); }
 #playerOK { background: var(--accent); color: #111; }
 #playerOK:hover { filter: brightness(1.1); }
 #playerCancel { background: var(--key-bg); color: var(--text); border: 1px solid var(--border); }
