@@ -6,7 +6,7 @@
 
 'use strict';
 
-const CACHE_NAME = 'ecopo-v4.3.1';
+const CACHE_NAME = 'ecopo-v4.3.2';
 
 /* Tous les fichiers constituant l'appli */
 const ASSETS = [
