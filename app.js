@@ -851,7 +851,7 @@ function showPopup(msg, type = 'error') {
   popupEl.textContent = msg;
   popupEl.className   = `popup ${type}`;
   clearTimeout(_popupTimeout);
-  _popupTimeout = setTimeout(hidePopup, 5000);   /* 5 s */
+  _popupTimeout = setTimeout(hidePopup, 8000);   /* 8 s */
 }
 function hidePopup() {
   popupEl.classList.add('hidden');
