@@ -173,6 +173,40 @@ html, body {
 }
 .btn-classements:hover { background: rgba(217,165,33,0.12); }
 
+/* ── Modale Classements : 3 colonnes côte à côte ────────────── */
+.modal-classements { min-width: 640px; max-width: 92vw; }
+.classements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 10px 0 20px;
+  text-align: left;
+}
+.classements-col h4 {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+.classements-col ul { list-style: none; margin: 0; padding: 0; }
+.classements-col li {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 2px 0;
+  border-bottom: 1px dotted rgba(255,255,255,0.12);
+}
+.classements-col li:first-child { font-weight: 700; }   /* le leader */
+.classements-vide { color: #999; font-style: italic; }
+@media (max-width: 600px) {
+  .modal-classements { min-width: 0; width: 92vw; }
+  .classements-grid { grid-template-columns: 1fr; }   /* empilage sur mobile */
+}
+
 /* ── Arena ───────────────────────────────────────────────────── */
 .arena {
   display: flex;
