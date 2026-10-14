@@ -797,7 +797,9 @@ function registerChallengeRecord(partial) {
   return { isNewRecord: true, best: score };
 }
 
-/** Envoie le record au web app Apps Script (best effort, non bloquant) */
+/** Envoie le record au web app Apps Script (best effort, non bloquant)
+ *  puis affiche un message de statut synthétisant ce qui vient d'être
+ *  inscrit dans le Journal. */
 function sendRecordToSheet(record) {
   if (!RECORDS_WEBHOOK_URL || !navigator.onLine) return;
   try {
@@ -806,8 +808,38 @@ function sendRecordToSheet(record) {
       /* text/plain : évite la pré-requête CORS (preflight) */
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(record),
-    }).catch(() => { /* échec réseau → le record reste en local */ });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.status === 'ok') {
+          showPopup(messageJournal_(record), 'success');
+        } else {
+          showPopup(
+            'Envoi refusé : ' + ((data && data.message) || 'raison inconnue') +
+            ' — le score reste enregistré dans l\'appareil.', 'error');
+        }
+      })
+      .catch(() => {
+        /* Réponse illisible (CORS) ou échec réseau : l'envoi a bien eu
+           lieu, mais on ne peut pas confirmer côté serveur. */
+        showPopup(messageJournal_(record, true), 'info');
+      });
   } catch (_) { /* tant pis */ }
+}
+
+/** Synthèse de la ligne qui vient d'être inscrite dans le Journal */
+function messageJournal_(record, envoyeSeulement) {
+  const d = record.date ? new Date(record.date) : new Date();
+  const dateStr = d.toLocaleDateString('fr-FR', {
+    day: '2-digit', month: '2-digit', year: 'numeric'
+  });
+  const timeStr = d.toLocaleTimeString('fr-FR', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
+  });
+  return (envoyeSeulement ? 'Envoyé au Journal : ' : 'Inscrit dans le Journal : ') +
+    `${record.prenom} ${record.nom} — ${record.mode}, ` +
+    `${record.score} points, ${record.volleys} volées exactes` +
+    ` (le ${dateStr} à ${timeStr}).`;
 }
 
 /* ================================================================
