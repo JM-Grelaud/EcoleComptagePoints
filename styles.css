@@ -663,6 +663,8 @@ html, body {
 }
 .player-form input:focus { border-color: var(--accent); }
 .player-form input.invalid { border-color: var(--error); }
+.player-form input.readonly { background: #eef1f4; color: #444; cursor: default; }
+.player-form input.readonly:focus { border-color: #aaa; }
 .player-form select {
   height: 38px;
   padding: 0 12px;
