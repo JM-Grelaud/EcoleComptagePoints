@@ -1,12 +1,12 @@
 /* ================================================================
    sw.js — Service Worker
-   Archers de Laillé | Entraînement au comptage des points | V4.3
+   Archers de Laillé | Entraînement au comptage des points | V4.3.1
    Stratégie : Cache First — l'appli fonctionne 100 % hors-ligne
    ================================================================ */
 
 'use strict';
 
-const CACHE_NAME = 'ecopo-v4.3';
+const CACHE_NAME = 'ecopo-v4.3.1';
 
 /* Tous les fichiers constituant l'appli */
 const ASSETS = [
