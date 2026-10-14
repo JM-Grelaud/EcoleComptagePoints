@@ -54,6 +54,9 @@ const btnCAMPAGNE  = document.getElementById('btnCAMPAGNE');
 const btnJEU       = document.getElementById('btnJEU');
 const btnMANUEL    = document.getElementById('btnMANUEL');
 const btnCLASSEMENTS = document.getElementById('btnCLASSEMENTS');
+const classementsOverlay = document.getElementById('classementsOverlay');
+const classementsGrid    = document.getElementById('classementsGrid');
+const classementsOK     = document.getElementById('classementsOK');
 const btnClose     = document.getElementById('btnClose');
 const modalOverlay = document.getElementById('modalOverlay');
 const modalMsg     = document.getElementById('modalMsg');
@@ -904,7 +907,7 @@ function afficherClassements() {
     .then((data) => {
       hidePopup();
       if (data && data.status === 'ok') {
-        showModal(construireModalClassements_(data.classements || {}));
+        remplirClassements_(data.classements || {});
       } else {
         showPopup('Classements indisponibles.', 'error');
       }
@@ -915,27 +918,38 @@ function afficherClassements() {
     });
 }
 
-/** Construit la modale : une section par type de volée. Les lignes
- *  suivent l'ordre des colonnes de tes QUERY
- *  (Prénom, Nom, Score, Volées exactes, Date). */
-function construireModalClassements_(classements) {
-  let body = '';
+/** Remplit la modale des classements : 3 colonnes côte à côte,
+ *  une par type de volée. Les lignes vides sont ignorées. */
+function remplirClassements_(classements) {
+  classementsGrid.innerHTML = '';
   ['SALLE', 'TAE', 'CAMPAGNE'].forEach((mode) => {
-    body += `── ${mode} ──\n`;
-    const rows = classements[mode];
-    if (!rows || !rows.length) {
-      body += 'Aucun record pour l\'instant.\n';
+    const col    = document.createElement('div');
+    col.className = 'classements-col';
+    const titre = document.createElement('h4');
+    titre.textContent = mode;
+    col.appendChild(titre);
+
+    const ul = document.createElement('ul');
+    const rows = (classements[mode] || [])
+      .filter((r) => r.some((c) => String(c).trim() !== ''));
+    if (!rows.length) {
+      const li = document.createElement('li');
+      li.className = 'classements-vide';
+      li.textContent = 'Aucun record pour l\'instant.';
+      ul.appendChild(li);
     } else {
       rows.forEach((r, i) => {
-        const ligne = (r.length >= 5)
+        const li = document.createElement('li');
+        li.textContent = (i + 1) + '. ' + ((r.length >= 5)
           ? `${r[0]} ${r[1]} — ${r[2]} pts, ${r[3]} volées (${r[4]})`
-          : r.join(' — ');
-        body += `${i + 1}. ${ligne}\n`;
+          : r.join(' — '));
+        ul.appendChild(li);
       });
     }
-    body += '\n';
+    col.appendChild(ul);
+    classementsGrid.appendChild(col);
   });
-  return { title: '🏆 Classements du club', body: body.trim() };
+  classementsOverlay.classList.remove('hidden');
 }
 
 /* ================================================================
@@ -1057,6 +1071,7 @@ btnTAE     .addEventListener('click', () => { preloadSounds(); startMode('TAE');
 btnCAMPAGNE.addEventListener('click', () => { preloadSounds(); startMode('CAMPAGNE'); });
 btnJEU     .addEventListener('click', toggleChallenge);
 btnCLASSEMENTS.addEventListener('click', afficherClassements);
+classementsOK.addEventListener('click', () => classementsOverlay.classList.add('hidden'));
 btnMANUEL .addEventListener('click', () => {
   /* Manuel d'utilisation au format PDF (mis en cache hors-ligne) */
   window.open('EcCoPo_Manuel_Utilisateur.pdf', '_blank');
