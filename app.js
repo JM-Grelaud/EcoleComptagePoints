@@ -1,6 +1,6 @@
 /* ================================================================
    app.js — Logique de l'application
-   Port de TfrmMain (main.pas) — Archers de Laillé V4.3
+   Port de TfrmMain (main.pas) — Archers de Laillé V4.3.1
    ================================================================ */
 
 'use strict';
@@ -63,6 +63,8 @@ const playerOverlay = document.getElementById('playerOverlay');
 const playerPrenom  = document.getElementById('playerPrenom');
 const playerNom     = document.getElementById('playerNom');
 const playerLicence = document.getElementById('playerLicence');
+const playerArcher  = document.getElementById('playerArcher');
+const playerArcherWrap = document.getElementById('playerArcherWrap');
 const playerOK      = document.getElementById('playerOK');
 const playerCancel  = document.getElementById('playerCancel');
 
@@ -500,6 +502,11 @@ function openPlayerModal() {
       playerPrenom.value  = last.prenom  || '';
       playerNom.value     = last.nom     || '';
       playerLicence.value = last.licence || '';
+      /* Sélectionne l'archer dans la liste déroulante s'il y figure */
+      if (playerArcher && last.licence &&
+          [...playerArcher.options].some(o => o.value === last.licence)) {
+        playerArcher.value = last.licence;
+      }
     }
   } catch (_) { /* stockage indisponible → modale vierge */ }
 
@@ -621,6 +628,77 @@ function buildChallengeResult() {
          + `Le ${dateStr} à ${timeStr}.`,
   };
 }
+
+/* ================================================================
+   Archers du club (liste fournie par la web app Google)
+   • Récupération au lancement (si en ligne), cache localStorage
+   • Auto-complétion de la modale joueur ; repli hors-ligne
+   ================================================================ */
+const ARCHERS_KEY = 'ecopo-archers';
+
+function loadArchers() {
+  try {
+    return JSON.parse(localStorage.getItem(ARCHERS_KEY) || 'null');
+  } catch (_) {
+    return null;
+  }
+}
+
+function saveArchers(archers) {
+  try {
+    localStorage.setItem(ARCHERS_KEY, JSON.stringify(archers));
+  } catch (_) { /* stockage indisponible → ignoré */ }
+}
+
+/** Récupère la liste des archers depuis la web app (GET /exec) */
+async function refreshArchers() {
+  if (!RECORDS_WEBHOOK_URL || !navigator.onLine) return;
+  try {
+    const resp = await fetch(RECORDS_WEBHOOK_URL);
+    const data  = await resp.json();
+    if (data && Array.isArray(data.archers) && data.archers.length) {
+      saveArchers(data.archers);
+      fillArcherSelect(data.archers);
+    }
+  } catch (_) { /* réseau indisponible → on garde le cache */ }
+}
+
+/** Construit (ou met à jour) le menu déroulant des archers */
+function fillArcherSelect(archers) {
+  if (!playerArcher || !playerArcherWrap) return;
+
+  /* Pas de liste disponible → saisie manuelle uniquement */
+  playerArcherWrap.classList.toggle('hidden', !(archers && archers.length));
+  if (!archers || !archers.length) return;
+
+  const current = playerArcher.value;
+  playerArcher.innerHTML = '';
+  const head = document.createElement('option');
+  head.value       = '';
+  head.textContent = '— Sélectionner un archer —';
+  playerArcher.appendChild(head);
+  archers.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value       = a.licence;
+    opt.textContent = a.nom.toUpperCase() + ' ' + a.prenom + ' (' + a.licence + ')';
+    playerArcher.appendChild(opt);
+  });
+  if (current && [...playerArcher.options].some(o => o.value === current)) {
+    playerArcher.value = current;
+  }
+}
+
+/* Sélection d'un archer → pré-remplissage des trois champs */
+playerArcher.addEventListener('change', () => {
+  const licence = playerArcher.value;
+  if (!licence) return;
+  const a = (loadArchers() || []).find(x => x.licence === licence);
+  if (a) {
+    playerPrenom.value   = a.prenom;
+    playerNom.value      = a.nom;
+    playerLicence.value  = a.licence;
+  }
+});
 
 /* ================================================================
    Records des challenges
@@ -821,6 +899,10 @@ btnMANUEL .addEventListener('click', () => {
   resizeCanvas();
   buildKeyboard(10);
   setKeyboardEnabled(false);
+
+  /* Archers du club : cache local immédiat, puis mise à jour en ligne */
+  fillArcherSelect(loadArchers());
+  refreshArchers();
 
   /* Splash screen — affiché 2,5s puis fondu sortie */
   const splash = document.getElementById('splashOverlay');
