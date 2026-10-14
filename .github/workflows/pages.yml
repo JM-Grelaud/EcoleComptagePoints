@@ -1,0 +1,43 @@
+name: Pages (main + v4.3 beta)
+
+on:
+  push:
+    branches: [main, v4.3]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Site public : branche main, publiée à la racine
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      # Version beta : branche v4.3, publiée dans le sous-dossier v43/
+      - uses: actions/checkout@v4
+        with:
+          ref: v4.3
+          path: v43
+
+      # Le .git ne doit pas se retrouver dans le site publié
+      - run: rm -rf .git v43/.git
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - uses: actions/deploy-pages@v4
+        id: deployment
