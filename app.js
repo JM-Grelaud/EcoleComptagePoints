@@ -940,9 +940,18 @@ function remplirClassements_(classements) {
     } else {
       rows.forEach((r, i) => {
         const li = document.createElement('li');
-        li.textContent = (i + 1) + '. ' + ((r.length >= 5)
-          ? `${r[0]} ${r[1]} — ${r[2]} pts, ${r[3]} volées (${r[4]})`
-          : r.join(' — '));
+        li.className = 'rang-' + (i + 1);          /* médailles or/argent/bronze */
+        let ligne;
+        if (r.length >= 5 && /^\d+$/.test(String(r[0]).trim())) {
+          /* Onglet avec colonne Rang : Rang | Prénom | Nom | Score | Volées (| Date…) */
+          ligne = `${i + 1} : ${r[1]} ${r[2]} | ${r[3]} points | ${r[4]} volées`;
+        } else if (r.length >= 5) {
+          /* Onglet sans Rang : Prénom | Nom | Score | Volées | Date */
+          ligne = `${i + 1} : ${r[0]} ${r[1]} | ${r[2]} points | ${r[3]} volées`;
+        } else {
+          ligne = `${i + 1} : ` + r.join(' | ');
+        }
+        li.textContent = ligne;
         ul.appendChild(li);
       });
     }
