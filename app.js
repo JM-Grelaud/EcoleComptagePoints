@@ -48,6 +48,7 @@ const btnSALLE     = document.getElementById('btnSALLE');
 const btnTAE       = document.getElementById('btnTAE');
 const btnCAMPAGNE  = document.getElementById('btnCAMPAGNE');
 const btnJEU       = document.getElementById('btnJEU');
+const btnMANUEL    = document.getElementById('btnMANUEL');
 const btnClose     = document.getElementById('btnClose');
 const modalOverlay = document.getElementById('modalOverlay');
 const modalMsg     = document.getElementById('modalMsg');
@@ -646,6 +647,10 @@ btnSALLE   .addEventListener('click', () => { preloadSounds(); startMode('SALLE'
 btnTAE     .addEventListener('click', () => { preloadSounds(); startMode('TAE'); });
 btnCAMPAGNE.addEventListener('click', () => { preloadSounds(); startMode('CAMPAGNE'); });
 btnJEU     .addEventListener('click', toggleChallenge);
+btnMANUEL .addEventListener('click', () => {
+  /* Manuel d'utilisation au format PDF (mis en cache hors-ligne) */
+  window.open('EcCoPo_Manuel_Utilisateur.pdf', '_blank');
+});
 
 /* ================================================================
    Initialisation
