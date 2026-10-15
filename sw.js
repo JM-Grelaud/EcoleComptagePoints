@@ -19,6 +19,7 @@ const ASSETS = [
   './icon-192.png',
   './icon-512.png',
   './icon-180.png',
+  './EcCoPo_Manuel_Utilisateur.pdf',
 ];
 
 /* ── Installation : mise en cache de tous les assets ─────────── */
