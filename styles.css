@@ -174,7 +174,10 @@ html, body {
 .btn-classements:hover { background: rgba(217,165,33,0.12); }
 
 /* ── Modale Classements : 3 colonnes côte à côte ────────────── */
-.modal-classements { min-width: min(980px, calc(100vw - 32px)); max-width: 96vw; }
+.modal.modal-classements {
+  width: max-content;                 /* la carte épouse la largeur des 3 colonnes */
+  max-width: calc(100vw - 32px);      /* sans jamais dépasser la fenêtre */
+}
 .classements-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
@@ -219,7 +222,7 @@ html, body {
 }
 .classements-vide { color: #999; font-style: italic; }
 @media (max-width: 600px) {
-  .modal-classements { min-width: 0; width: 92vw; }
+  .modal.modal-classements { width: calc(100vw - 32px); }
   .classements-grid { grid-template-columns: 1fr; }   /* empilage sur mobile */
 }
 
