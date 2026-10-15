@@ -25,10 +25,10 @@ const ZONE_COLORS = [
 
 const ZONE_COLORS_CAMPAGNE = [
   null, null, null, null, null,
-  { fill: '#000000', stroke: '#FFFFFF' },   // [5]
-  { fill: '#000000', stroke: '#FFFFFF' },   // [6]
-  { fill: '#000000', stroke: '#FFFFFF' },   // [7]
-  { fill: '#000000', stroke: '#FFFFFF' },   // [8]
+  { fill: '#436A7D', stroke: '#FFFFFF' },   // [5]
+  { fill: '#436A7D', stroke: '#FFFFFF' },   // [6]
+  { fill: '#436A7D', stroke: '#FFFFFF' },   // [7]
+  { fill: '#436A7D', stroke: '#FFFFFF' },   // [8]
   { fill: '#FFE552', stroke: '#333333' },   // [9]
   { fill: '#FFE552', stroke: '#333333' },   // [10]
 ];
