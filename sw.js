@@ -1,12 +1,12 @@
 /* ================================================================
    sw.js — Service Worker
-   Archers de Laillé | Entraînement au comptage des points | V4.3.1
+   Archers de Laillé | Entraînement au comptage des points | V4.2
    Stratégie : Cache First — l'appli fonctionne 100 % hors-ligne
    ================================================================ */
 
 'use strict';
 
-const CACHE_NAME = 'ecopo-v4.3.17';
+const CACHE_NAME = 'ecopo-v4.2';
 
 /* Tous les fichiers constituant l'appli */
 const ASSETS = [
@@ -19,7 +19,6 @@ const ASSETS = [
   './icon-192.png',
   './icon-512.png',
   './icon-180.png',
-  './EcCoPo_Manuel_Utilisateur.pdf',
 ];
 
 /* ── Installation : mise en cache de tous les assets ─────────── */
@@ -40,7 +39,7 @@ self.addEventListener('activate', (event) => {
           .filter((key) => key !== CACHE_NAME)
           .map((key) => caches.delete(key))
       )
-    ).then(() => self.clients.claim())   /* prend le contrôle immédiatement */
+    ).then(() => self.clients.claim())  /* prend le contrôle immédiatement */
   );
 });
 
