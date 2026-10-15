@@ -1,6 +1,6 @@
 /* ================================================================
    app.js — Logique de l'application
-   Port de TfrmMain (main.pas) — Archers de Laillé V4.3.1
+   Port de TfrmMain (main.pas) — Archers de Laillé V5.0
    ================================================================ */
 
 'use strict';
