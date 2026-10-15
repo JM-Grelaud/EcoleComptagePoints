@@ -174,12 +174,16 @@ html, body {
 .btn-classements:hover { background: rgba(217,165,33,0.12); }
 
 /* ── Modale Classements : 3 colonnes côte à côte ────────────── */
-.modal-classements { min-width: 980px; max-width: 96vw; }
+.modal.modal-classements {
+  width: max-content;                 /* la carte épouse la largeur des 3 colonnes */
+  max-width: calc(100vw - 32px);      /* sans jamais dépasser la fenêtre */
+}
 .classements-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
   gap: 16px;
   margin: 10px 0 20px;
+  overflow-x: auto;   /* au pire : défilement, jamais de texte coupé */
   text-align: left;
 }
 .classements-col h4 {
@@ -218,7 +222,7 @@ html, body {
 }
 .classements-vide { color: #999; font-style: italic; }
 @media (max-width: 600px) {
-  .modal-classements { min-width: 0; width: 92vw; }
+  .modal.modal-classements { width: calc(100vw - 32px); }
   .classements-grid { grid-template-columns: 1fr; }   /* empilage sur mobile */
 }
 
