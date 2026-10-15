@@ -174,7 +174,7 @@ html, body {
 .btn-classements:hover { background: rgba(217,165,33,0.12); }
 
 /* ── Modale Classements : 3 colonnes côte à côte ────────────── */
-.modal-classements { min-width: 640px; max-width: 92vw; }
+.modal-classements { min-width: 980px; max-width: 96vw; }
 .classements-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -198,6 +198,7 @@ html, body {
   font-size: 12px;
   line-height: 1.5;
   padding: 2px 0;
+  white-space: nowrap;
   border-bottom: 1px dotted rgba(255,255,255,0.12);
 }
 .classements-col li:first-child { font-weight: 700; }   /* le leader */
