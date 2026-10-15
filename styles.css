@@ -138,94 +138,6 @@ html, body {
 }
 .btn-challenge.active:hover { background: #d94048; }
 
-/* ── Bouton Manuel (PDF) — calé à droite de la mode-bar ─────── */
-.btn-manuel {
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  width: 110px;
-  padding: 6px 0;
-  background: transparent;
-  color: var(--accent-blue);
-  border: 2px solid var(--accent-blue);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background 0.14s, color 0.14s, border-color 0.14s;
-}
-.btn-manuel:hover { background: rgba(0,180,228,0.12); }
-
-/* ── Bouton Classements (GS) — à côté du bouton Challenge ────── */
-.btn-classements {
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 6px 10px;
-  background: transparent;
-  color: #d9a521;
-  border: 2px solid #d9a521;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background 0.14s, color 0.14s, border-color 0.14s;
-}
-.btn-classements:hover { background: rgba(217,165,33,0.12); }
-
-/* ── Modale Classements : 3 colonnes côte à côte ────────────── */
-.modal.modal-classements {
-  width: max-content;                 /* la carte épouse la largeur des 3 colonnes */
-  max-width: calc(100vw - 32px);      /* sans jamais dépasser la fenêtre */
-}
-.classements-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 16px;
-  margin: 10px 0 20px;
-  overflow-x: auto;   /* au pire : défilement, jamais de texte coupé */
-  text-align: left;
-}
-.classements-col h4 {
-  font-family: var(--font-ui);
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent-blue);
-  border-bottom: 1px solid rgba(255,255,255,0.25);
-  padding-bottom: 4px;
-  margin-bottom: 6px;
-}
-.classements-col ul { list-style: none; margin: 0; padding: 0; }
-.classements-col li {
-  font-family: var(--font-ui);
-  font-size: 12px;
-  line-height: 1.5;
-  padding: 2px 0;
-  white-space: nowrap;
-  border-bottom: 1px dotted rgba(255,255,255,0.12);
-}
-.classements-col li:first-child { font-weight: 700; }   /* le leader */
-
-/* ── Médailles : or / argent / bronze, comme l'onglet Top Ten ── */
-.classements-col li.rang-1 {
-  background: #FFD700; color: #000;
-  border-bottom: none; border-radius: 3px; padding: 3px 5px;
-}
-.classements-col li.rang-2 {
-  background: #C0C0C0; color: #000;
-  border-bottom: none; border-radius: 3px; padding: 3px 5px;
-}
-.classements-col li.rang-3 {
-  background: #CD7F32; color: #000;
-  border-bottom: none; border-radius: 3px; padding: 3px 5px;
-}
-.classements-vide { color: #999; font-style: italic; }
-@media (max-width: 600px) {
-  .modal.modal-classements { width: calc(100vw - 32px); }
-  .classements-grid { grid-template-columns: 1fr; }   /* empilage sur mobile */
-}
-
 /* ── Arena ───────────────────────────────────────────────────── */
 .arena {
   display: flex;
@@ -289,25 +201,21 @@ html, body {
 
 /* ── Popup ───────────────────────────────────────────────────── */
 .popup {
-  position: fixed;   /* bas + gauche calés sur le blason par le script */
-  max-width: 92%;
-  z-index: 300;      /* au-dessus des modales (z=200) */
-  padding: 8px 12px;
-  border-radius: 6px;
+  display: block;
+  margin: 6px 6px 0;
+  padding: 6px 10px;
+  border-radius: 4px;
   font-family: var(--font-ui);
   font-weight: 600;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.03em;
   text-align: center;
   white-space: normal;
   line-height: 1.35;
   pointer-events: none;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-  transform: translate(-50%, 50%);
 }
 .popup.error { background: rgba(246,80,88,0.92); color: #fff; }
 .popup.info  { background: rgba(0,180,228,0.88); color: #fff; }
-.popup.success { background: rgba(46,164,58,0.92); color: #fff; }
 
 /* ── Flash erreur : paille → rouge → paille, 500 ms ─────────── */
 /* ── Flash overlay (au-dessus du canvas) ─────────────────────── */
@@ -446,20 +354,6 @@ html, body {
   grid-template-columns: 1fr 1fr;
   gap: 4px;
   align-content: start;
-}
-.round-label {
-  width: fit-content;
-  margin: 6px auto 0;
-  padding: 3px 10px;
-  border-radius: 2px;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.03em;
-  text-align: center;
-  color: #000000;
-  background-color: #FFF8A6;   /* jaune Post-It */
-  box-shadow: 2px 2px 4px rgba(0,0,0,0.25);
 }
 .key {
   font-family: var(--font-ui);
@@ -684,74 +578,6 @@ html, body {
   border-color: var(--error);
   color: var(--error);
 }
-
-/* ── Modale identification joueur (Challenge) ────────────────── */
-.modal-player { min-width: 340px; }
-.player-title {
-  font-family: var(--font-ui);
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin: 0 0 4px 0;
-}
-.player-sub {
-  font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text);
-  margin: 0 0 16px 0;
-}
-.player-form {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-  margin-bottom: 20px;
-  text-align: left;
-}
-.player-form label {
-  font-family: var(--font-ui);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-.player-form input {
-  height: 38px;
-  padding: 0 12px;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  font-family: var(--font-ui);
-  font-size: 16px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.player-form input:focus { border-color: var(--accent); }
-.player-form input.invalid { border-color: var(--error); }
-.player-form input.readonly { background: #eef1f4; color: #444; cursor: default; }
-.player-form input.readonly:focus { border-color: #aaa; }
-.player-form select {
-  height: 38px;
-  padding: 0 12px;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  font-family: var(--font-ui);
-  font-size: 16px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.player-form select:focus { border-color: var(--accent); }
-#playerOK { background: var(--accent); color: #111; }
-#playerOK:hover { filter: brightness(1.1); }
-#playerCancel { background: var(--key-bg); color: var(--text); border: 1px solid var(--border); }
-#playerCancel:hover { background: var(--key-hover); }
 
 /* ── Utilities ───────────────────────────────────────────────── */
 .hidden { display: none !important; }
