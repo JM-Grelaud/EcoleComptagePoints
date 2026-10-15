@@ -1,8 +1,8 @@
-name: Pages (main + v4.3 beta)
+name: Pages (main + v5.0 beta)
 
 on:
   push:
-    branches: [main, v4.3]
+    branches: [main, v5.0]
   workflow_dispatch:
 
 permissions:
@@ -26,14 +26,14 @@ jobs:
         with:
           ref: main
 
-      # Version beta : branche v4.3, publiée dans le sous-dossier v43/
+      # Version beta : branche v5.0, publiée dans le sous-dossier v50/
       - uses: actions/checkout@v4
         with:
-          ref: v4.3
-          path: v43
+          ref: v5.0
+          path: v50
 
       # Le .git ne doit pas se retrouver dans le site publié
-      - run: rm -rf .git v43/.git
+      - run: rm -rf .git v50/.git
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
