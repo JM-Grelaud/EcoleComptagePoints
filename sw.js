@@ -1,6 +1,6 @@
 /* ================================================================
    sw.js — Service Worker
-   Archers de Laillé | Entraînement au comptage des points | V4.3.1
+   Archers de Laillé | Entraînement au comptage des points | V5.0
    Stratégie : Cache First — l'appli fonctionne 100 % hors-ligne
    ================================================================ */
 
