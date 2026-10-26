@@ -902,7 +902,7 @@ function afficherClassements() {
     return;
   }
   showPopup('Chargement des classements…', 'info');
-  fetch(RECORDS_WEBHOOK_URL + '?action=classements')
+  fetch(RECORDS_WEBHOOK_URL + '?action=classements&_=' + Date.now())  /* cache-buster : la réponse n'est jamais servie du cache navigateur */
     .then((res) => res.json())
     .then((data) => {
       hidePopup();
@@ -921,10 +921,19 @@ function afficherClassements() {
 /** Remplit la modale des classements : 3 colonnes côte à côte,
  *  une par type de volée. Les lignes vides sont ignorées. */
 function remplirClassements_(classements) {
-  /* Sous-titre : date d'établissement des classements (HoroClassement) */
-  const horodatage = String(classements.horodatage || '').trim();
+  /* Sous-titre global (HoroClassement) — vidé si chaque bloc porte
+     sa propre date « Établi le … » dans la feuille */
+  const horodatages = classements.horodatages || {};
+  const auMoinsUneDate = ['SALLE', 'TAE', 'CAMPAGNE'].some((m) => horodatages[m]);
   const sub = document.getElementById('classementsSub');
-  if (sub) sub.textContent = horodatage ? 'Établi le ' + horodatage : 'Classements du club';
+  if (sub) {
+    if (auMoinsUneDate) {
+      sub.textContent = '';   /* les dates s'affichent sous chaque colonne */
+    } else {
+      const horodatage = String(classements.horodatage || '').trim();
+      sub.textContent = horodatage ? 'Établi le ' + horodatage : 'Classements du club';
+    }
+  }
 
   classementsGrid.innerHTML = '';
   ['SALLE', 'TAE', 'CAMPAGNE'].forEach((mode) => {
@@ -932,6 +941,13 @@ function remplirClassements_(classements) {
     col.className = 'classements-col';
     const titre = document.createElement('h4');
     titre.textContent = mode;
+    const dateBloc = String(horodatages[mode] || '').trim();
+    if (dateBloc) {
+      const span = document.createElement('span');
+      span.className = 'classements-date';
+      span.textContent = dateBloc;   /* ex. « Établi le 19/10/2026 à 17:11 » */
+      titre.appendChild(span);
+    }
     col.appendChild(titre);
 
     const ul = document.createElement('ul');
@@ -945,17 +961,21 @@ function remplirClassements_(classements) {
     } else {
       rows.forEach((r, i) => {
         const li = document.createElement('li');
-        li.className = 'rang-' + (i + 1);          /* médailles or/argent/bronze */
+        let rang;
         let ligne;
         if (r.length >= 5 && /^\d+$/.test(String(r[0]).trim())) {
-          /* Onglet avec colonne Rang : Rang | Prénom | Nom | Score | Volées (| Date…) */
-          ligne = `${i + 1} : ${r[1]} ${r[2]} | ${r[3]} points | ${r[4]} volées`;
+          /* Rang de la feuille (il peut sauter des valeurs : ex-aequos) */
+          rang = String(r[0]).trim();
+          ligne = `${rang} : ${r[1]} ${r[2]} | ${r[3]} points | ${r[4]} volées`;
         } else if (r.length >= 5) {
-          /* Onglet sans Rang : Prénom | Nom | Score | Volées | Date */
-          ligne = `${i + 1} : ${r[0]} ${r[1]} | ${r[2]} points | ${r[3]} volées`;
+          /* Bloc sans Rang : Prénom | Nom | Score | Volées | Date */
+          rang = String(i + 1);
+          ligne = `${rang} : ${r[0]} ${r[1]} | ${r[2]} points | ${r[3]} volées`;
         } else {
-          ligne = `${i + 1} : ` + r.join(' | ');
+          rang = String(i + 1);
+          ligne = `${rang} : ` + r.join(' | ');
         }
+        li.className = 'rang-' + rang;   /* médailles or/argent/bronze pour les rangs 1 à 3 */
         li.textContent = ligne;
         ul.appendChild(li);
       });
