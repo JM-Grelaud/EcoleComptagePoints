@@ -177,13 +177,19 @@ html, body {
 .modal.modal-classements {
   width: max-content;                 /* la carte épouse la largeur des 3 colonnes */
   max-width: calc(100vw - 32px);      /* sans jamais dépasser la fenêtre */
+  height: 95%;                        /* hauteur portée à 95 % de l'écran */
+  display: flex;
+  flex-direction: column;             /* titre en haut, Fermer en bas, grille au milieu */
+  overflow: hidden;                   /* l'ascenseur vit dans la grille */
 }
 .classements-grid {
   display: grid;
   grid-template-columns: repeat(3, max-content);   /* 3 colonnes, largeur de contenu */
   gap: 16px;
   margin: 10px 0 20px;
-  overflow-x: auto;   /* au pire : défilement, jamais de texte coupé */
+  flex: 1 1 auto;         /* la grille occupe l'espace entre titre et bouton */
+  min-height: 0;          /* obligatoire pour que l'ascenseur fonctionne en flex */
+  overflow: auto;         /* ascenseurs vertical et horizontal */
   text-align: left;
 }
 .classements-col h4 {
@@ -221,6 +227,13 @@ html, body {
   border-bottom: none; border-radius: 3px; padding: 3px 5px;
 }
 .classements-vide { color: #999; font-style: italic; }
+/* Ascenseur vertical discret dans la grille des classements */
+.classements-grid::-webkit-scrollbar { width: 10px; height: 10px; }
+.classements-grid::-webkit-scrollbar-track { background: transparent; }
+.classements-grid::-webkit-scrollbar-thumb {
+  background: rgba(255,229,82,0.35);
+  border-radius: 5px;
+}
 @media (max-width: 600px) {
   .modal.modal-classements { width: calc(100vw - 32px); }
   .classements-grid { grid-template-columns: 1fr; }   /* empilage sur mobile */
