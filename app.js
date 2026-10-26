@@ -921,6 +921,11 @@ function afficherClassements() {
 /** Remplit la modale des classements : 3 colonnes côte à côte,
  *  une par type de volée. Les lignes vides sont ignorées. */
 function remplirClassements_(classements) {
+  /* Sous-titre : date d'établissement des classements (HoroClassement) */
+  const horodatage = String(classements.horodatage || '').trim();
+  const sub = document.getElementById('classementsSub');
+  if (sub) sub.textContent = horodatage ? 'Établi le ' + horodatage : 'Classements du club';
+
   classementsGrid.innerHTML = '';
   ['SALLE', 'TAE', 'CAMPAGNE'].forEach((mode) => {
     const col    = document.createElement('div');
