@@ -177,7 +177,7 @@ html, body {
 .modal.modal-classements {
   width: max-content;                 /* la carte épouse la largeur des 3 colonnes */
   max-width: calc(100vw - 32px);      /* sans jamais dépasser la fenêtre */
-  height: 90%;                        /* hauteur de la modale */
+  height: 90%;                        /* hauteur de la modale (demande du 26/10 : 95 % puis 90 %) */
   display: flex;
   flex-direction: column;             /* titre en haut, Fermer en bas, grille au milieu */
   overflow: hidden;                   /* l'ascenseur vit dans la grille */
@@ -187,6 +187,7 @@ html, body {
   grid-template-columns: repeat(3, max-content);   /* 3 colonnes, largeur de contenu */
   gap: 16px;
   margin: 10px 0 20px;
+  padding-right: 16px;   /* l'ascenseur ne chevauche plus la dernière colonne */
   flex: 1 1 auto;         /* la grille occupe l'espace entre titre et bouton */
   min-height: 0;          /* obligatoire pour que l'ascenseur fonctionne en flex */
   overflow: auto;         /* ascenseurs vertical et horizontal */
@@ -199,8 +200,13 @@ html, body {
   text-transform: uppercase;
   color: var(--accent-blue);
   border-bottom: 1px solid rgba(255,255,255,0.25);
+  padding-top: 4px;
   padding-bottom: 4px;
   margin-bottom: 6px;
+  position: sticky;       /* le titre reste visible pendant le défilement */
+  top: 0;
+  z-index: 1;
+  background: var(--bg-card);   /* opaque : masque les lignes qui passent dessous */
 }
 .classements-col ul { list-style: none; margin: 0; padding: 0; }
 .classements-col li {
