@@ -33,6 +33,7 @@ const state = {
   chalScore:    0,     // iScoJeu
   chalLabel:    '',    // sResultat (début)
   timerHandle:  null,  // setInterval handle
+  totalValidated: false, /* anti double-comptage : total déjà validé pour la volée en cours */
 
   /* Joueur identifié au démarrage du challenge */
   player:       null,  // { prenom, nom, licence }
@@ -342,6 +343,8 @@ function validateTotal() {
 
   /* Valeur correcte → succès */
   if (entered === correct) {
+    if (state.totalValidated) return;   /* déjà validé → ignorer (anti double-comptage) */
+    state.totalValidated = true;
     totalInput.classList.remove('error');
     totalInput.classList.add('correct');
     hidePopup();
@@ -398,6 +401,7 @@ function launchVolley() {
   state.nbEntered = 0;
   state.totalPts  = 0;
   state.phase     = 'arrows';
+  state.totalValidated = false;   /* nouvelle volée → validation à nouveau possible */
 
   /* Reset UI */
   clearArrowFields();
@@ -572,6 +576,7 @@ function startChallenge() {
   state.chalVolleys = 0;
   state.chalScore   = 0;
   state.chalLabel   = '';
+  state.totalValidated = false;   /* repart propre (anti double-comptage) */
 
   btnJEU.textContent = 'Challenge ON';
   btnJEU.classList.add('active');
