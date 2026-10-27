@@ -33,6 +33,7 @@ const state = {
   chalScore:    0,     // iScoJeu
   chalLabel:    '',    // sResultat (début)
   timerHandle:  null,  // setInterval handle
+  totalValidated: false, /* anti double-comptage : total déjà validé pour la volée en cours */
 };
 
 /* ================================================================
@@ -326,6 +327,8 @@ function validateTotal() {
 
   /* Valeur correcte → succès */
   if (entered === correct) {
+    if (state.totalValidated) return;   /* déjà validé → ignorer (anti double-comptage) */
+    state.totalValidated = true;
     totalInput.classList.remove('error');
     totalInput.classList.add('correct');
     hidePopup();
@@ -382,6 +385,7 @@ function launchVolley() {
   state.nbEntered = 0;
   state.totalPts  = 0;
   state.phase     = 'arrows';
+  state.totalValidated = false;   /* nouvelle volée → validation à nouveau possible */
 
   /* Reset UI */
   clearArrowFields();
